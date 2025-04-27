@@ -1,0 +1,49 @@
+✅ Main Features
+🧑‍🏫 For Lecturers:
+Login / Register
+
+Generate QR Code per class/session (with session title/name)
+
+QR Refreshes every 3 minutes automatically for security
+
+View Dashboard:
+
+List of all past QR sessions
+
+For each QR session: view attendance (name, index number, phone, GPS location, time of scan)
+
+🎓 For Students:
+Login / Register
+
+Update Bio Data (name, index number, phone number)
+
+Scan QR Code
+
+On scan: app captures their info + current GPS location and submits it to the backend
+
+🧰 Tech Stack
+Layer Tech
+Frontend Vite + React + TypeScript
+UI Bootstrap CSS
+Backend Node.js + Express
+Auth JWT Authentication
+Database MongoDB
+QR Scanning Browser API / QR scanner lib
+GPS Browser Geolocation API
+
+Student dashboard;
+
+[ Welcome, Nana Yaw! ]
+[ Index Number: 1012345 ] ← Header Card
+
+[ [📷] SCAN QR CODE ] ← QR Code Card
+[ Scan the QR to mark attendance ]
+
+[ Recent Attendance ] ← Attendance Table
+| Date | Time | Status |
+|------------|----------|---------|
+| 2025-04-18 | 10:05 AM | Present |
+| 2025-04-17 | 02:15 PM | Present |
+| ... |
+
+[ 🔴 Logout 🟡 Help? ] ← Footer Buttons
