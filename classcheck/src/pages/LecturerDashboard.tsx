@@ -161,17 +161,87 @@
 
 // 3.Session List
 
+// import GenerateQR from "../components/lecturer/QRGenerate";
+// import LecturerUser from "../components/lecturer/LecturerUser";
+// import SessionList from "../components/lecturer/SessionList";
+
+// const LecturerDashboard = () => {
+//   return (
+//     <div className="container mt-5">
+//       <h2 className="mb-4">Lecturer name</h2>
+//       <LecturerUser />
+//       <GenerateQR />
+//       <SessionList />
+//     </div>
+//   );
+// };
+
+// export default LecturerDashboard;
+
+
+//4
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getRequest } from "../utils/api";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { User, QrCode, AlertCircle } from "lucide-react";
 import GenerateQR from "../components/lecturer/QRGenerate";
 import LecturerUser from "../components/lecturer/LecturerUser";
 import SessionList from "../components/lecturer/SessionList";
+import LoadingScreen from "../components/public/LoadingScreen"
 
 const LecturerDashboard = () => {
+  const [lecturerName, setLecturerName] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchLecturer = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("No token found");
+        }
+
+        const data = await getRequest("lecturer/me", token);
+        setLecturerName(data.name);
+      } catch (err: unknown) {
+        const errorMessage =
+          err instanceof Error ? err.message : "Failed to fetch lecturer data";
+        setError(errorMessage);
+        console.error("Error fetching lecturer info:", err);
+        navigate("/lecturer/login");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLecturer();
+  }, [navigate]);
+
   return (
-    <div className="container mt-5">
-      <h2 className="mb-4">Lecturer Dashboard</h2>
-      <LecturerUser />
-      <GenerateQR />
-      <SessionList />
+    <div className="p-4 sm:p-6 lg:p-8">
+      {loading ? <LoadingScreen />:
+      <Card className="shadow-lg">
+        <CardContent className="space-y-6">
+            <div className="space-y-4">
+              <h3 className="text-xl font-medium">
+                Welcome,{" "}
+                <span className="text-blue-600 dark:text-blue-400">
+                  {lecturerName}
+                </span>
+                !
+              </h3>
+            </div>
+        </CardContent>
+      </Card>
+      }
     </div>
   );
 };

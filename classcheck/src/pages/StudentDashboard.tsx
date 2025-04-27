@@ -135,14 +135,82 @@
 //   );
 // }
 
+// //2
+// import { useEffect, useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { getRequest } from "../utils/api";
+// import QRScanner from "../components/student/QRScanner";
+// import AttendanceHistory from "@/components/student/AttendanceHistory";
+
+// const StudentDashbboard = () => {
+//   const [studentName, setStudentName] = useState("");
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const fetchStudentData = async () => {
+//       try {
+//         const token = localStorage.getItem("token");
+//         if (!token) throw new Error("No token found");
+
+//         const data = await getRequest("student/me", token);
+//         setStudentName(data.name);
+//       } catch (error: unknown) {
+//         console.error("Error fetching student info:", error);
+
+//         let errMsg = "Authentication error";
+
+//         if (typeof error === "string") {
+//           errMsg = error;
+//         } else if (
+//           typeof error === "object" &&
+//           error !== null &&
+//           "message" in error &&
+//           typeof (error as { message?: string }).message === "string"
+//         ) {
+//           errMsg = (error as { message: string }).message;
+//         }
+
+//         if (
+//           errMsg === "Token verification failed" ||
+//           errMsg === "No token found"
+//         ) {
+//           localStorage.removeItem("token");
+//           navigate("student/login");
+//         }
+//       }
+//     };
+
+//     fetchStudentData();
+//   }, [navigate]);
+
+//   return (
+//     <div className="container mt-5 text-center">
+//       <h2>Welcome {studentName || "Loading..."}</h2>
+//       <h2>Scan Attendance QR Code</h2>
+//       <p>
+//         Allow camera access and scan the QR code displayed by your lecturer.
+//       </p>
+//       <QRScanner />
+//       <p>Attendance</p>
+//       <AttendanceHistory />
+//     </div>
+//   );
+// };
+
+// export default StudentDashbboard;
+
+
+//3
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getRequest } from "../utils/api";
 import QRScanner from "../components/student/QRScanner";
 import AttendanceHistory from "@/components/student/AttendanceHistory";
+import LoadingScreen from "../components/public/LoadingScreen"; // 👈 import your loading screen
 
-const StudentDashbboard = () => {
+const StudentDashboard = () => {
   const [studentName, setStudentName] = useState("");
+  const [loading, setLoading] = useState(true); // 👈 Add loading state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -174,17 +242,23 @@ const StudentDashbboard = () => {
           errMsg === "No token found"
         ) {
           localStorage.removeItem("token");
-          navigate("student/login");
+          navigate("/student/login"); // 👈 (I added a "/" missing before)
         }
+      } finally {
+        setLoading(false); // 👈 Turn off loading whether success or error
       }
     };
 
     fetchStudentData();
   }, [navigate]);
 
+  if (loading) {
+    return <LoadingScreen />; // 👈 show loading screen while loading
+  }
+
   return (
     <div className="container mt-5 text-center">
-      <h2>Welcome {studentName || "Loading..."}</h2>
+      <h2>Welcome {studentName}</h2>
       <h2>Scan Attendance QR Code</h2>
       <p>
         Allow camera access and scan the QR code displayed by your lecturer.
@@ -196,4 +270,4 @@ const StudentDashbboard = () => {
   );
 };
 
-export default StudentDashbboard;
+export default StudentDashboard;
