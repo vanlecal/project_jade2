@@ -86,13 +86,13 @@ const getRequest = async (endpoint: string, token?: string) => {
 };
 
 
-const generateQr = async (title: string) => {
+const generateQr = async (title: string, program: string) => {
   const token = localStorage.getItem('token');
 
   try {
     const res = await axios.post(
       `${API_URL}/lecturer/generate`,
-      { title },
+      { title, program },
       {
         headers: {
           Authorization: `Bearer ${token}`,

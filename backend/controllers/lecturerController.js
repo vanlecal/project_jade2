@@ -72,40 +72,82 @@ exports.getlecturerProfile = async (req, res) => {
 };
 
 
+// exports.generateQrSession = async (req, res) => {
+//   try {
+//     const { title, program } = req.body;
+//     if (!title || !program)
+//       return res.status(400).json({ message: 'QR session title and program are required' });
 
+//     // 1. Find or create a logical session
+//     let session = await Session.findOne({ title, lecturer: req.userId, program });
+
+//     if (!session) {
+//       session = await Session.create({
+//         title,
+//         lecturer: req.userId,
+//         program,
+//       });
+//     }
+
+//     // 2. Generate QR code for the session
+//     const code = uuidv4();
+//     const expiresAt = new Date(Date.now() + 3 * 60 * 1000); // 3 minutes from now
+
+//     const qrSession = await QrSession.create({
+//       code,
+//       session: session._id,
+//       expiresAt,
+//     });
+
+//     res.status(201).json({ code, expiresAt, title, program, sessionId: session._id });
+//   } catch (error) {
+//     console.error('QR generation error:', error.message);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// };
 
 
 exports.generateQrSession = async (req, res) => {
   try {
-    const { title } = req.body;
-    if (!title) return res.status(400).json({ message: 'QR session title required' });
+    const { title, program } = req.body;
+    if (!title || !program)
+      return res.status(400).json({ message: 'QR session title and program are required' });
 
-    // 1. Find or create a logical session
-    let session = await Session.findOne({ title, lecturer: req.userId });
+    let session = await Session.findOne({ title, lecturer: req.userId, program });
 
     if (!session) {
       session = await Session.create({
         title,
         lecturer: req.userId,
+        program,
       });
     }
 
-    // 2. Generate QR code for the session
     const code = uuidv4();
     const expiresAt = new Date(Date.now() + 3 * 60 * 1000); // 3 minutes from now
 
     const qrSession = await QrSession.create({
       code,
-      session: session._id,  // Link to the logical session
+      session: session._id,
       expiresAt,
     });
 
-    res.status(201).json({ code, expiresAt, title, sessionId: session._id });
+    // 👉 Emit an alert to the specific class/program
+    const io = req.app.get('io');
+    io.to(program).emit('attendance_opened', {
+      message: `Attendance session "${title}" is now open for program ${program}`,
+      code,
+      expiresAt,
+      program,
+    });
+
+    res.status(201).json({ code, expiresAt, title, program, sessionId: session._id });
   } catch (error) {
     console.error('QR generation error:', error.message);
     res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 
 

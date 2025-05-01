@@ -3,12 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import { generateQr } from "../../utils/api";
 import { QRCodeCanvas } from "qrcode.react";
+import socket from "../../utils/socket";
 
 const REFRESH_INTERVAL = 3 * 60 * 1000; // 3 minutes in milliseconds
 const REFRESH_SECONDS = REFRESH_INTERVAL / 1000; // 180 seconds
 
 const GenerateQR = () => {
   const [title, setTitle] = useState("");
+  const [program, setProgram] = useState("");
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [expiresAt, setExpiresAt] = useState<string | null>(null);
   const [generatedAt, setGeneratedAt] = useState<string | null>(null);
@@ -19,14 +21,38 @@ const GenerateQR = () => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const countdownRef = useRef<NodeJS.Timeout | null>(null);
 
+  // const generateAndSetQr = async () => {
+  //   try {
+  //     const { code, expiresAt } = await generateQr(title, program);
+  //     const now = new Date();
+  //     setQrCode(code);
+  //     setGeneratedAt(now.toLocaleTimeString());
+  //     setExpiresAt(new Date(expiresAt).toLocaleTimeString());
+  //     setCountdown(REFRESH_SECONDS);
+  //   } catch (err: unknown) {
+  //     setError(
+  //       err instanceof Error ? err.message : "Failed to generate QR code"
+  //     );
+  //   }
+  // };
+
   const generateAndSetQr = async () => {
     try {
-      const { code, expiresAt } = await generateQr(title);
+      const { code, expiresAt } = await generateQr(title, program);
       const now = new Date();
       setQrCode(code);
       setGeneratedAt(now.toLocaleTimeString());
       setExpiresAt(new Date(expiresAt).toLocaleTimeString());
       setCountdown(REFRESH_SECONDS); // ✅ reset countdown
+
+      // ✅ Emit event to notify students in this program
+      socket.emit("attendance_opened", {
+        program,
+        title,
+        code,
+        generatedAt: now.toISOString(),
+        expiresAt,
+      });
     } catch (err: unknown) {
       setError(
         err instanceof Error ? err.message : "Failed to generate QR code"
@@ -89,6 +115,23 @@ const GenerateQR = () => {
         className="form-control mb-3"
         disabled={isGenerating}
       />
+
+      <select
+        value={program}
+        onChange={(e) => setProgram(e.target.value)}
+        className="form-control mb-3"
+        disabled={isGenerating}
+      >
+        <option value="">Select Program/Class</option>
+        <option value="Computer Science L100">Computer Science L100</option>
+        <option value="Computer Science L200">Computer Science L200</option>
+        <option value="Computer Science L300">Computer Science L300</option>
+        <option value="Computer Science L400">Computer Science L400</option>
+        <option value="AI/ML L100">AI/ML L100</option>
+        <option value="AI/ML L200">AI/ML L200</option>
+        <option value="AI/ML L300">AI/ML L300</option>
+        <option value="AI/ML L400">AI/ML L400</option>
+      </select>
 
       <div className="mb-4">
         {!isGenerating ? (

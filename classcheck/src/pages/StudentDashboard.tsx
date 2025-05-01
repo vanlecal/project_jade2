@@ -199,18 +199,20 @@
 
 // export default StudentDashbboard;
 
-
 //3
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getRequest } from "../utils/api";
 import QRScanner from "../components/student/QRScanner";
 import AttendanceHistory from "@/components/student/AttendanceHistory";
-import LoadingScreen from "../components/public/LoadingScreen"; // 👈 import your loading screen
+import LoadingScreen from "../components/public/LoadingScreen";
+import socket from "../utils/socket";
 
 const StudentDashboard = () => {
   const [studentName, setStudentName] = useState("");
-  const [loading, setLoading] = useState(true); // 👈 Add loading state
+  const [studentprogram, setStudentprogram] = useState("");
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -221,6 +223,18 @@ const StudentDashboard = () => {
 
         const data = await getRequest("student/me", token);
         setStudentName(data.name);
+        setStudentprogram(data.program);
+
+        // ✅ JOIN socket room after program is known
+        socket.emit("join_class", data.program);
+        console.log(`Joined class room: ${data.program}`);
+
+        // ✅ Listen for attendance alert from lecturer
+        socket.on("attendance_opened", (payload) => {
+          if (payload.program === data.program) {
+            alert(`📢 Attendance session opened for ${payload.program}`);
+          }
+        });
       } catch (error: unknown) {
         console.error("Error fetching student info:", error);
 
@@ -242,23 +256,28 @@ const StudentDashboard = () => {
           errMsg === "No token found"
         ) {
           localStorage.removeItem("token");
-          navigate("/student/login"); // 👈 (I added a "/" missing before)
+          navigate("/student/login");
         }
       } finally {
-        setLoading(false); // 👈 Turn off loading whether success or error
+        setLoading(false);
       }
     };
 
     fetchStudentData();
+
+    return () => {
+      socket.off("attendance_opened");
+    };
   }, [navigate]);
 
   if (loading) {
-    return <LoadingScreen />; // 👈 show loading screen while loading
+    return <LoadingScreen />;
   }
 
   return (
     <div className="container mt-5 text-center">
       <h2>Welcome {studentName}</h2>
+      <h2>program: {studentprogram}</h2>
       <h2>Scan Attendance QR Code</h2>
       <p>
         Allow camera access and scan the QR code displayed by your lecturer.

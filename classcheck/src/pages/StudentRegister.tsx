@@ -475,16 +475,16 @@ const StudentRegister = () => {
                   <SelectValue placeholder="Select Program" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Comper Science L100">
+                  <SelectItem value="Computer Science L100">
                     Computer Science L100
                   </SelectItem>
-                  <SelectItem value="Comper Science L200">
+                  <SelectItem value="Computer Science L200">
                     Computer Science L200
                   </SelectItem>
-                  <SelectItem value="Comper Science L300">
+                  <SelectItem value="Computer Science L300">
                     Computer Science L300
                   </SelectItem>
-                  <SelectItem value="Comper Science L400">
+                  <SelectItem value="Computer Science L400">
                     Computer Science L400
                   </SelectItem>
                   <SelectItem value="AI/ML L100">AI/ML L100</SelectItem>

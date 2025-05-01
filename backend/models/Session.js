@@ -6,6 +6,10 @@ const sessionSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  program: {
+    type: String,
+    required: false,
+  },
   lecturer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'LecturerUser',

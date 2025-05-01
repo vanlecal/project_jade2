@@ -240,6 +240,8 @@ const LecturerDashboard = () => {
               </h3>
             </div>
         </CardContent>
+        <GenerateQR />
+        <SessionList />
       </Card>
       }
     </div>
