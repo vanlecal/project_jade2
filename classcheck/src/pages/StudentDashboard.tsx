@@ -206,6 +206,7 @@ import { useNavigate } from "react-router-dom";
 import { getRequest } from "../utils/api";
 import QRScanner from "../components/student/QRScanner";
 import AttendanceHistory from "@/components/student/AttendanceHistory";
+import SessionStatusList from "@/components/student/SessionStatusList";
 import LoadingScreen from "../components/public/LoadingScreen";
 import socket from "../utils/socket";
 
@@ -284,7 +285,8 @@ const StudentDashboard = () => {
       </p>
       <QRScanner />
       <p>Attendance</p>
-      <AttendanceHistory />
+      <SessionStatusList />
+      {/* <AttendanceHistory /> */}
     </div>
   );
 };

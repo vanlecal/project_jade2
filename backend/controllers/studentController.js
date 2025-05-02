@@ -8,8 +8,6 @@ const LecturerUser = require('../models/lecturerModel');
 const getHumanReadableLocation = require('../utils/geolocation');
 
 
-
-
 exports.registerUser = async (req, res) => {
     try {
       const { name, index, phone, email, sex, program, password } = req.body;
@@ -74,46 +72,6 @@ exports.getStudentProfile = async (req, res) => {
   }
 };
 
-
-
-// attendance Controller
-
-// exports.recordAttendance = async (req, res) => {
-//   try {
-//     const { code } = req.body;
-//     const {latitude, longitude } = req.body;
-//     const studentId = req.userId;
-
-//     console.log('Received code:', code);
-//     console.log('Received studentId:', studentId);
-//     console.log('Received latitude:', latitude);
-//     console.log('Received longitude:', longitude);
-
-//     // Find the QR session using the code
-//     const qrSession = await QrSession.findOne({ code }).populate('session');
-
-//     if (!qrSession) return res.status(404).json({ message: 'Invalid QR code' });
-//     if (new Date() > qrSession.expiresAt) return res.status(410).json({ message: 'QR code expired' });
-
-//     const sessionId = qrSession.session._id;
-
-//     // Prevent duplicate attendance for the same session
-//     const alreadyMarked = await Attendance.findOne({ student: studentId, session: sessionId });
-//     if (alreadyMarked) return res.status(409).json({ message: 'Already marked present for this session' });
-
-//     // Create attendance record
-//     await Attendance.create({
-//       student: studentId,
-//       session: sessionId,   // Use logical session ID, not QR session ID
-//       scannedAt: new Date(), // Optional timestamp
-//     });
-
-//     res.status(200).json({ message: 'Attendance recorded successfully' });
-//   } catch (err) {
-//     console.error('Attendance error:', err.message);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// };
 
 
 // attendance Controller 2 + GPS Test
@@ -188,5 +146,44 @@ exports.getAttendanceHistory = async (req, res) => {
   } catch (err) {
     console.error('Error fetching attendance history:', err.message);
     res.status(500).json({ message: 'Failed to retrieve attendance history' });
+  }
+};
+
+
+const Student = require("../models/studentModel");
+
+exports.getStudentQrSessionsStatus = async (req, res) => {
+  try {
+    const studentId = req.userId;
+
+    // ✅ Use the Student model here
+    const studentData = await Student.findById(studentId);
+    if (!studentData) return res.status(404).json({ message: 'Student not found' });
+
+    // Find all sessions for this program
+    const sessions = await Session.find({ program: studentData.program });
+    const sessionIds = sessions.map(session => session._id);
+
+    // Find all QR sessions for these sessions
+    const qrSessions = await QrSession.find({ session: { $in: sessionIds } }).populate('session');
+
+    // Find all attendance records for this student
+    const attendance = await Attendance.find({ student: studentId });
+    const attendedSessionIds = attendance.map(att => att.session.toString());
+
+    // Format the results
+    const response = qrSessions.map(qr => ({
+      qrCode: qr.code,
+      sessionTitle: qr.session.title,
+      sessionId: qr.session._id,
+      expiresAt: qr.expiresAt,
+      createdAt: qr.createdAt,
+      attended: attendedSessionIds.includes(qr.session._id.toString()),
+    }));
+
+    res.json({ sessions: response });
+  } catch (error) {
+    console.error('Error fetching QR session status:', error.message);
+    res.status(500).json({ message: 'Server error' });
   }
 };
