@@ -133,13 +133,8 @@ const QRScanner = () => {
   };
 
   return (
-    <div className="text-center">
-      <h3>Scan QR Code</h3>
-      <div
-        id="qr-reader"
-        ref={scannerRef}
-        style={{ width: "300px", margin: "auto" }}
-      />
+    <div>
+      <div id="qr-reader" ref={scannerRef} />
       {message && <p className="mt-3">{message}</p>}
       {scanned && message.startsWith("❌") && (
         <button

@@ -179,6 +179,8 @@ exports.getStudentQrSessionsStatus = async (req, res) => {
       expiresAt: qr.expiresAt,
       createdAt: qr.createdAt,
       attended: attendedSessionIds.includes(qr.session._id.toString()),
+
+      
     }));
 
     res.json({ sessions: response });

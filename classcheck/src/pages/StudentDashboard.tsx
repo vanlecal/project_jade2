@@ -205,15 +205,19 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getRequest } from "../utils/api";
 import QRScanner from "../components/student/QRScanner";
-import AttendanceHistory from "@/components/student/AttendanceHistory";
 import SessionStatusList from "@/components/student/SessionStatusList";
 import LoadingScreen from "../components/public/LoadingScreen";
 import socket from "../utils/socket";
 
+import { QrCode, LogOut, HelpCircle } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
 const StudentDashboard = () => {
   const [studentName, setStudentName] = useState("");
-  const [studentprogram, setStudentprogram] = useState("");
+  const [studentindex, setStudentindex] = useState("");
   const [loading, setLoading] = useState(true);
+  const [showScanner, setShowScanner] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -224,7 +228,7 @@ const StudentDashboard = () => {
 
         const data = await getRequest("student/me", token);
         setStudentName(data.name);
-        setStudentprogram(data.program);
+        setStudentindex(data.index);
 
         // ✅ JOIN socket room after program is known
         socket.emit("join_class", data.program);
@@ -276,17 +280,73 @@ const StudentDashboard = () => {
   }
 
   return (
-    <div className="container mt-5 text-center">
-      <h2>Welcome {studentName}</h2>
-      <h2>program: {studentprogram}</h2>
-      <h2>Scan Attendance QR Code</h2>
-      <p>
-        Allow camera access and scan the QR code displayed by your lecturer.
-      </p>
-      <QRScanner />
-      <p>Attendance</p>
-      <SessionStatusList />
-      {/* <AttendanceHistory /> */}
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        {/* Header */}
+        <Card className="mb-6 border-t-4 border-t-primary">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl">Welcome, {studentName}!</CardTitle>
+            <p className="text-muted-foreground">
+              Index Number: {studentindex}
+            </p>
+          </CardHeader>
+        </Card>
+
+        {/* QR Code Section */}
+        <Card className="mb-6">
+          <CardContent className="flex flex-col items-center justify-center py-10">
+            {!showScanner && (
+              <div>
+                <div className="ml-4">
+                  <Button
+                    onClick={() => setShowScanner(true)}
+                    size="lg"
+                    className="flex items-center gap-2 text-lg h-16 px-8 bg-slate-950 text-white border-radius-50"
+                  >
+                    <QrCode className="h-6 w-6" />
+                    SCAN QR CODE
+                  </Button>
+                </div>
+                <p className="mt-4 text-sm text-muted-foreground">
+                  Scan the QR code to mark your attendance
+                </p>
+              </div>
+            )}
+            {showScanner && <QRScanner />}
+          </CardContent>
+        </Card>
+
+        {/* Recent Attendance */}
+
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Recent Attendance</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <SessionStatusList />
+          </CardContent>
+        </Card>
+
+        {/* Footer */}
+        <div className="flex justify-between">
+          <Button
+            variant="destructive"
+            // onClick={handleLogout}
+            className="flex items-center gap-2"
+          >
+            <LogOut className="h-4 w-4" />
+            Logout
+          </Button>
+          <Button
+            variant="outline"
+            // onClick={handleHelp}
+            className="flex items-center gap-2"
+          >
+            <HelpCircle className="h-4 w-4" />
+            Help?
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
