@@ -6,6 +6,7 @@ import LecturerLogin from "./pages/LecturerLogin";
 import LecturerRegister from "./pages/LecturerRegister";
 import LecturerDashboard from "./pages/LecturerDashboard";
 import StudentDashbboard from "./pages/StudentDashboard";
+import DashboardPage from "./TestRoom/lecturer/dashboard-page";
 // import "./App.css";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/LD" element={<DashboardPage />} />
         <Route path="/student/login" element={<StudentLogin />} />
         <Route path="/student/register" element={<StudentRegister />} />
         <Route path="/student/scan" element={<StudentDashbboard />} />

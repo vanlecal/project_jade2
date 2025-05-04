@@ -1,0 +1,77 @@
+{
+  "sessions": [
+    {
+      "id": "1",
+      "title": "Introduction to Algorithms",
+      "program": "Computer Science",
+      "date": "2023-05-03",
+      "totalStudents": 35,
+      "attendees": 32
+    },
+    {
+      "id": "2",
+      "title": "Database Systems",
+      "program": "Information Technology",
+      "date": "2023-05-02",
+      "totalStudents": 30,
+      "attendees": 28
+    },
+    {
+      "id": "3",
+      "title": "Software Engineering",
+      "program": "Computer Science",
+      "date": "2023-05-01",
+      "totalStudents": 45,
+      "attendees": 40
+    },
+    {
+      "id": "4",
+      "title": "Network Security",
+      "program": "Cybersecurity",
+      "date": "2023-04-30",
+      "totalStudents": 25,
+      "attendees": 22
+    },
+    {
+      "id": "5",
+      "title": "Web Development",
+      "program": "Information Technology",
+      "date": "2023-04-29",
+      "totalStudents": 28,
+      "attendees": 25
+    }
+  ],
+  "studentAttendance": {
+    "1": [
+      { "id": "1", "name": "John Doe", "index": "CS2021001", "gps": "5.6037, -0.1870", "time": "10:15 AM" },
+      { "id": "2", "name": "Jane Smith", "index": "CS2021002", "gps": "5.6038, -0.1872", "time": "10:12 AM" },
+      { "id": "3", "name": "Michael Johnson", "index": "CS2021003", "gps": "5.6035, -0.1871", "time": "10:10 AM" },
+      { "id": "4", "name": "Emily Brown", "index": "CS2021004", "gps": "5.6039, -0.1873", "time": "10:18 AM" },
+      { "id": "5", "name": "David Wilson", "index": "CS2021005", "gps": "5.6036, -0.1869", "time": "10:22 AM" }
+    ],
+    "2": [
+      { "id": "6", "name": "Sarah Johnson", "index": "IT2021006", "gps": "5.6040, -0.1875", "time": "2:05 PM" },
+      { "id": "7", "name": "Robert Brown", "index": "IT2021007", "gps": "5.6041, -0.1876", "time": "2:08 PM" },
+      { "id": "8", "name": "Jennifer Davis", "index": "IT2021008", "gps": "5.6039, -0.1874", "time": "2:10 PM" },
+      { "id": "9", "name": "William Miller", "index": "IT2021009", "gps": "5.6042, -0.1877", "time": "2:12 PM" }
+    ],
+    "3": [
+      { "id": "10", "name": "Elizabeth Wilson", "index": "CS2021010", "gps": "5.6043, -0.1878", "time": "11:30 AM" },
+      { "id": "11", "name": "James Taylor", "index": "CS2021011", "gps": "5.6044, -0.1879", "time": "11:32 AM" },
+      { "id": "12", "name": "Patricia Anderson", "index": "CS2021012", "gps": "5.6045, -0.1880", "time": "11:35 AM" },
+      { "id": "13", "name": "Richard Thomas", "index": "CS2021013", "gps": "5.6046, -0.1881", "time": "11:38 AM" },
+      { "id": "14", "name": "Linda Jackson", "index": "CS2021014", "gps": "5.6047, -0.1882", "time": "11:40 AM" }
+    ],
+    "4": [
+      { "id": "15", "name": "Charles White", "index": "CY2021015", "gps": "5.6048, -0.1883", "time": "3:15 PM" },
+      { "id": "16", "name": "Barbara Harris", "index": "CY2021016", "gps": "5.6049, -0.1884", "time": "3:18 PM" },
+      { "id": "17", "name": "Joseph Martin", "index": "CY2021017", "gps": "5.6050, -0.1885", "time": "3:20 PM" }
+    ],
+    "5": [
+      { "id": "18", "name": "Susan Thompson", "index": "IT2021018", "gps": "5.6051, -0.1886", "time": "9:45 AM" },
+      { "id": "19", "name": "Thomas Garcia", "index": "IT2021019", "gps": "5.6052, -0.1887", "time": "9:48 AM" },
+      { "id": "20", "name": "Margaret Martinez", "index": "IT2021020", "gps": "5.6053, -0.1888", "time": "9:50 AM" },
+      { "id": "21", "name": "Christopher Robinson", "index": "IT2021021", "gps": "5.6054, -0.1889", "time": "9:52 AM" }
+    ]
+  }
+}
