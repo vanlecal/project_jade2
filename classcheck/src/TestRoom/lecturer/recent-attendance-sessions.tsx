@@ -167,7 +167,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Eye, FileDown } from "lucide-react";
+import { FileDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getRequest } from "@/utils/api";

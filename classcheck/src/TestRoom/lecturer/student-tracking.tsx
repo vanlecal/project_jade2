@@ -1,4 +1,3 @@
-
 //1
 // import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 // import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -130,7 +129,6 @@
 //   )
 // }
 
-
 //2
 
 // import React, { useEffect, useState } from "react";
@@ -223,10 +221,9 @@
 //   );
 // };
 
-
 //3
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { getRequest } from "../../utils/api";
 
 interface MissedSession {
   title: string;
@@ -253,17 +250,22 @@ export function StudentTracking() {
   useEffect(() => {
     const fetchAbsentees = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5000/api/lecturer/attendance/absentees/by-lecturer",
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
+        const token = localStorage.getItem("token");
+        if (!token) throw new Error("Authentication token not found");
+
+        const response = await getRequest(
+          "lecturer/attendance/absentees/by-lecturer",
+          token
         );
-        setAbsentees(response.data.absentees);
-      } catch (err: any) {
-        setError(err.message || "Failed to fetch absentees");
+        setAbsentees(response.absentees);
+      } catch (err) {
+        if (err instanceof Error) {
+          console.error("Error fetching attendance history:", err.message);
+          setError(err.message);
+        } else {
+          console.error("Unexpected error:", err);
+          setError("An unexpected error occurred.");
+        }
       } finally {
         setLoading(false);
       }
@@ -273,14 +275,11 @@ export function StudentTracking() {
 
   const filteredAbsentees = filteredProgram
     ? absentees.filter(
-        (a) =>
-          a.student.program.toLowerCase() === filteredProgram.toLowerCase()
+        (a) => a.student.program.toLowerCase() === filteredProgram.toLowerCase()
       )
     : absentees;
 
-  const uniquePrograms = [
-    ...new Set(absentees.map((a) => a.student.program)),
-  ];
+  const uniquePrograms = [...new Set(absentees.map((a) => a.student.program))];
 
   const getBadgeColor = (count: number) => {
     if (count >= 5) return "bg-red-600";

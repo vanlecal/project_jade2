@@ -346,58 +346,144 @@ exports.getAbsentStudentsForQrSession = async (req, res) => {
 
 // Get Absentees by Lecturer
 
+// exports.getAbsenteesByLecturer = async (req, res) => {
+//   try {
+//     const lecturerId = req.userId;
+
+//     // Step 1: Find all sessions by this lecturer
+//     const sessions = await Session.find({ lecturer: lecturerId });
+
+//     const programSessionMap = {};
+//     for (const session of sessions) {
+//       if (!programSessionMap[session.program]) {
+//         programSessionMap[session.program] = [];
+//       }
+//       programSessionMap[session.program].push(session);
+//     }
+
+//     const absenteesMap = {};
+
+//     // Step 2: Loop through each session and find students in the same program who missed it
+//     for (const session of sessions) {
+//       const studentsInProgram = await StudentUser.find({ program: session.program });
+
+//       for (const student of studentsInProgram) {
+//         const attended = await Attendance.findOne({
+//           student: student._id,
+//           session: session._id,
+//         });
+
+//         if (!attended) {
+//           if (!absenteesMap[student._id]) {
+//             absenteesMap[student._id] = {
+//               student: {
+//                 name: student.name,
+//                 indexNumber: student.index,
+//                 program: student.program,
+//               },
+//               missedSessions: [],
+//             };
+//           }
+
+//           absenteesMap[student._id].missedSessions.push({
+//             title: session.title,
+//             date: session.createdAt,
+//           });
+//         }
+//       }
+//     }
+
+//     const absentees = Object.values(absenteesMap);
+
+//     res.status(200).json({ absentees });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Failed to fetch absentees.' });
+//   }
+// };
+
+
+
+
+
+
+
+
+
 exports.getAbsenteesByLecturer = async (req, res) => {
   try {
     const lecturerId = req.userId;
 
-    // Step 1: Find all sessions by this lecturer
+    // Step 1: Get all sessions created by this lecturer
     const sessions = await Session.find({ lecturer: lecturerId });
 
-    const programSessionMap = {};
-    for (const session of sessions) {
-      if (!programSessionMap[session.program]) {
-        programSessionMap[session.program] = [];
-      }
-      programSessionMap[session.program].push(session);
+    if (!sessions.length) {
+      return res.status(200).json({ absentees: [] });
     }
 
-    const absenteesMap = {};
+    const sessionIds = sessions.map(s => s._id.toString());
 
-    // Step 2: Loop through each session and find students in the same program who missed it
+    // Step 2: Map sessions to programs
+    const programToSessions = {};
     for (const session of sessions) {
-      const studentsInProgram = await StudentUser.find({ program: session.program });
+      if (!programToSessions[session.program]) {
+        programToSessions[session.program] = [];
+      }
+      programToSessions[session.program].push({
+        _id: session._id,
+        title: session.title,
+        createdAt: session.createdAt,
+      });
+    }
 
-      for (const student of studentsInProgram) {
-        const attended = await Attendance.findOne({
-          student: student._id,
-          session: session._id,
-        });
+    const absentees = [];
 
-        if (!attended) {
-          if (!absenteesMap[student._id]) {
-            absenteesMap[student._id] = {
-              student: {
-                name: student.name,
-                indexNumber: student.index,
-                program: student.program,
-              },
-              missedSessions: [],
-            };
-          }
+    // Step 3: For each program, find students and sessions they missed
+    for (const [program, programSessions] of Object.entries(programToSessions)) {
+      const students = await StudentUser.find({ program });
 
-          absenteesMap[student._id].missedSessions.push({
-            title: session.title,
-            date: session.createdAt,
+      const studentIds = students.map(s => s._id);
+
+      // Step 4: Get all attendance for students in this program and sessions by this lecturer
+      const attendanceRecords = await Attendance.find({
+        student: { $in: studentIds },
+        session: { $in: programSessions.map(s => s._id) },
+      });
+
+      // Create a map of studentId -> Set of attended sessionIds
+      const attendanceMap = {};
+      for (const record of attendanceRecords) {
+        const sid = record.student.toString();
+        const sess = record.session.toString();
+        if (!attendanceMap[sid]) attendanceMap[sid] = new Set();
+        attendanceMap[sid].add(sess);
+      }
+
+      for (const student of students) {
+        const attendedSessions = attendanceMap[student._id.toString()] || new Set();
+        const missedSessions = programSessions.filter(
+          sess => !attendedSessions.has(sess._id.toString())
+        );
+
+        if (missedSessions.length > 0) {
+          absentees.push({
+            student: {
+              name: student.name,
+              indexNumber: student.index,
+              program: student.program,
+            },
+            missedSessions: missedSessions.map(s => ({
+              title: s.title,
+              date: s.createdAt,
+            })),
           });
         }
       }
     }
 
-    const absentees = Object.values(absenteesMap);
-
     res.status(200).json({ absentees });
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching absentees:', error);
     res.status(500).json({ message: 'Failed to fetch absentees.' });
   }
 };

@@ -1,4 +1,3 @@
-
 //1
 // import { useState, useEffect } from "react"
 // import { Button } from "@/components/ui/button"
@@ -303,12 +302,9 @@
 //   )
 // }
 
-
-
 //2
 import { useEffect, useState } from "react";
-import { getRequest, deleteRequest } from "../../utils/api";
-import { Button } from "@/components/ui/button";
+import { getRequest } from "../../utils/api";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
@@ -348,6 +344,8 @@ export function AttendanceRecords() {
     const fetchSessions = async () => {
       try {
         const token = localStorage.getItem("token");
+        if (!token) throw new Error("Authentication token not found");
+
         const data = await getRequest("lecturer/sessions", token);
         setSessions(data);
       } catch (err) {
@@ -369,6 +367,8 @@ export function AttendanceRecords() {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
+        if (!token) throw new Error("Authentication token not found");
+
         const data = await getRequest(
           `lecturer/attendance/${sessionId}`,
           token
@@ -392,7 +392,7 @@ export function AttendanceRecords() {
       {sessions.map((session) => {
         const attendance = attendanceMap[session._id] || [];
         const present = session.totalPresent ?? attendance.length;
-        const expected = session.totalExpected ?? 35;
+        const expected = session.totalExpected ?? 100;
         const percentage = Math.round((present / expected) * 100);
 
         return (
@@ -406,7 +406,8 @@ export function AttendanceRecords() {
                   <h3 className="text-xl font-bold">{session.title}</h3>
                   <p className="text-muted-foreground text-sm">
                     {session.program} — {formatDate(session.createdAt)} —
-                    Attendance: {present}/{expected} ({percentage}%)
+                    {/* Attendance: {present}/{expected} ({percentage}%) */}
+                    Attendance: {present}/.. ({percentage}%)
                   </p>
                 </div>
                 {expandedSessionId === session._id ? (
@@ -467,5 +468,4 @@ export function AttendanceRecords() {
       })}
     </div>
   );
-};
-
+}
