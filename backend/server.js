@@ -51,7 +51,6 @@ const io = new Server(server, {
   },
 });
 
-// Attach io to app so it can be accessed in controllers
 app.set('io', io);
 
 connectDB();

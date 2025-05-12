@@ -1,4 +1,3 @@
-
 // import type { ReactNode } from "react";
 // import {
 //   BarChart3,
@@ -171,9 +170,6 @@
 //     </SidebarProvider>
 //   );
 // }
-
-
-
 
 //2
 import type { JSX, ReactNode } from "react";
@@ -350,7 +346,7 @@ export function DashboardLayout({
               {menuItems.find((item) => item.value === currentView)?.label}
             </h1>
           </header>
-          <main className="p-6">{children}</main>
+          <main className="ml-21 p-6">{children}</main>
         </div>
       </div>
     </SidebarProvider>

@@ -8,7 +8,7 @@ import socket from "../../utils/socket";
 const REFRESH_INTERVAL = 3 * 60 * 1000; // 3 minutes in milliseconds
 const REFRESH_SECONDS = REFRESH_INTERVAL / 1000; // 180 seconds
 
-const GenerateQR = () => {
+export function GenerateQR() {
   const [title, setTitle] = useState("");
   const [program, setProgram] = useState("");
   const [qrCode, setQrCode] = useState<string | null>(null);
@@ -162,4 +162,3 @@ const GenerateQR = () => {
   );
 };
 
-export default GenerateQR;

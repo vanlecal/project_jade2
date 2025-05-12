@@ -43,17 +43,17 @@
   ],
   "studentAttendance": {
     "1": [
-      { "id": "1", "name": "John Doe", "index": "CS2021001", "gps": "5.6037, -0.1870", "time": "10:15 AM" },
-      { "id": "2", "name": "Jane Smith", "index": "CS2021002", "gps": "5.6038, -0.1872", "time": "10:12 AM" },
-      { "id": "3", "name": "Michael Johnson", "index": "CS2021003", "gps": "5.6035, -0.1871", "time": "10:10 AM" },
-      { "id": "4", "name": "Emily Brown", "index": "CS2021004", "gps": "5.6039, -0.1873", "time": "10:18 AM" },
-      { "id": "5", "name": "David Wilson", "index": "CS2021005", "gps": "5.6036, -0.1869", "time": "10:22 AM" }
+      { "id": "1", "name": "John Doe", "index": "CS2021001", "gps": "USA", "time": "10:15 AM" },
+      { "id": "2", "name": "Jane Smith", "index": "CS2021002", "gps": "UK", "time": "10:12 AM" },
+      { "id": "3", "name": "Michael Johnson", "index": "CS2021003", "gps": "GHANA", "time": "10:10 AM" },
+      { "id": "4", "name": "Emily Brown", "index": "CS2021004", "gps": "ACCRA", "time": "10:18 AM" },
+      { "id": "5", "name": "David Wilson", "index": "CS2021005", "gps": "CANADA", "time": "10:22 AM" }
     ],
     "2": [
-      { "id": "6", "name": "Sarah Johnson", "index": "IT2021006", "gps": "5.6040, -0.1875", "time": "2:05 PM" },
-      { "id": "7", "name": "Robert Brown", "index": "IT2021007", "gps": "5.6041, -0.1876", "time": "2:08 PM" },
-      { "id": "8", "name": "Jennifer Davis", "index": "IT2021008", "gps": "5.6039, -0.1874", "time": "2:10 PM" },
-      { "id": "9", "name": "William Miller", "index": "IT2021009", "gps": "5.6042, -0.1877", "time": "2:12 PM" }
+      { "id": "6", "name": "Sarah Johnson", "index": "IT2021006", "gps": "ACCRA", "time": "2:05 PM" },
+      { "id": "7", "name": "Robert Brown", "index": "IT2021007", "gps": "CANADA", "time": "2:08 PM" },
+      { "id": "8", "name": "Jennifer Davis", "index": "IT2021008", "gps": "CANADA", "time": "2:10 PM" },
+      { "id": "9", "name": "William Miller", "index": "IT2021009", "gps": "ACCRA", "time": "2:12 PM" }
     ],
     "3": [
       { "id": "10", "name": "Elizabeth Wilson", "index": "CS2021010", "gps": "5.6043, -0.1878", "time": "11:30 AM" },

@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/lecturerModel');
+const StudentUser = require('../models/studentModel');
 const QrSession = require('../models/QrSession');
 const Attendance = require('../models/Attendance');
 const Session = require('../models/Session');
@@ -214,3 +215,190 @@ exports.deleteSession = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+
+// For just one Session
+exports.getAbsentStudentsForQrSession = async (req, res) => {
+  try {
+    const { qrSessionId } = req.params;
+
+    if (!qrSessionId) {
+      return res.status(400).json({ message: 'QR session ID is required' });
+    }
+
+    // 1. Get the QR session and populate the session it belongs to
+    const qrSession = await QrSession.findById(qrSessionId).populate('session');
+    if (!qrSession) {
+      return res.status(404).json({ message: 'QR session not found' });
+    }
+
+    // 2. Get the session (which has the program and lecturer info)
+    const session = qrSession.session;
+    const program = session.program;
+    const lecturerId = session.lecturer.toString();
+
+    // Optional: Ensure the requesting lecturer matches the session's lecturer
+    if (req.userId !== lecturerId) {
+      return res.status(403).json({ message: 'Unauthorized access to this session' });
+    }
+
+    // 3. Find all students in that program
+    const allProgramStudents = await Student.find({ program });
+
+    // 4. Get attendance records for this specific QR session
+    const presentAttendance = await Attendance.find({ qrSession: qrSession._id });
+
+    const presentStudentIds = presentAttendance.map(a => a.student.toString());
+
+    // 5. Filter students who are not in the attendance list
+    const absentStudents = allProgramStudents
+      .filter(student => !presentStudentIds.includes(student._id.toString()))
+      .map(student => ({
+        name: student.name,
+        indexNumber: student.indexNumber,
+        program: student.program,
+        missedSessionTitle: session.title,
+      }));
+
+    res.json({
+      qrSessionId,
+      sessionTitle: session.title,
+      program,
+      absentees: absentStudents,
+      totalAbsent: absentStudents.length,
+    });
+
+  } catch (error) {
+    console.error('Error fetching absent students:', error.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+// Get all Opend sessions for students in a program
+
+// exports.mapStudentToSessions = async (req, res) => {
+//   try {
+//     const lecturerId = req.userId;
+
+//     // 1. Get all sessions created by this lecturer
+//     const sessions = await Session.find({ lecturer: lecturerId });
+
+//     const absenteesMap = new Map();
+
+//     // 2. Loop through each session
+//     for (const session of sessions) {
+//       const program = session.program;
+//       const sessionTitle = session.title;
+
+//       // 3. Find all QR sessions under this session
+//       const qrSessions = await QrSession.find({ session: session._id });
+
+//       for (const qr of qrSessions) {
+//         const date = qr.createdAt || qr.date;
+
+//         // 4. Get students in the program
+//         const studentList = await StudentUser.find({ program });
+
+//         // 5. Get present students for this QR session
+//         const presentAttendance = await Attendance.find({ qrSession: qr._id });
+//         const presentStudentIds = presentAttendance.map(a => a.student.toString());
+
+//         // 6. Identify absentees
+//         for (const student of studentList) {
+//           if (!presentStudentIds.includes(student._id.toString())) {
+//             const key = student._id.toString();
+
+//             if (!absenteesMap.has(key)) {
+//               absenteesMap.set(key, {
+//                 student: {
+//                   name: student.name,
+//                   indexNumber: student.index,
+//                   program: student.program
+//                 },
+//                 missedSessions: []
+//               });
+//             }
+
+//             absenteesMap.get(key).missedSessions.push({
+//               title: sessionTitle,
+//               date: date?.toISOString().split('T')[0] || "Unknown"
+//             });
+//           }
+//         }
+//       }
+//     }
+
+//     const absenteesList = Array.from(absenteesMap.values());
+
+//     res.json({
+//       lecturerId,
+//       absentees: absenteesList,
+//       totalStudentsWithAbsences: absenteesList.length
+//     });
+
+//   } catch (err) {
+//     console.error("Error getting absentees by lecturer:", err.message);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
+
+
+// Get Absentees by Lecturer
+
+exports.getAbsenteesByLecturer = async (req, res) => {
+  try {
+    const lecturerId = req.userId;
+
+    // Step 1: Find all sessions by this lecturer
+    const sessions = await Session.find({ lecturer: lecturerId });
+
+    const programSessionMap = {};
+    for (const session of sessions) {
+      if (!programSessionMap[session.program]) {
+        programSessionMap[session.program] = [];
+      }
+      programSessionMap[session.program].push(session);
+    }
+
+    const absenteesMap = {};
+
+    // Step 2: Loop through each session and find students in the same program who missed it
+    for (const session of sessions) {
+      const studentsInProgram = await StudentUser.find({ program: session.program });
+
+      for (const student of studentsInProgram) {
+        const attended = await Attendance.findOne({
+          student: student._id,
+          session: session._id,
+        });
+
+        if (!attended) {
+          if (!absenteesMap[student._id]) {
+            absenteesMap[student._id] = {
+              student: {
+                name: student.name,
+                indexNumber: student.index,
+                program: student.program,
+              },
+              missedSessions: [],
+            };
+          }
+
+          absenteesMap[student._id].missedSessions.push({
+            title: session.title,
+            date: session.createdAt,
+          });
+        }
+      }
+    }
+
+    const absentees = Object.values(absenteesMap);
+
+    res.status(200).json({ absentees });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to fetch absentees.' });
+  }
+};
+

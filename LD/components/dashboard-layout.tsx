@@ -1,7 +1,15 @@
-"use client"
+"use client";
 
-import type { ReactNode } from "react"
-import { BarChart3, QrCode, ClipboardList, AlertTriangle, LogOut, Menu, User } from "lucide-react"
+import type { ReactNode } from "react";
+import {
+  BarChart3,
+  QrCode,
+  ClipboardList,
+  AlertTriangle,
+  LogOut,
+  Menu,
+  User,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -12,42 +20,49 @@ import {
   SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { useMobile } from "@/hooks/use-mobile"
+} from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useMobile } from "@/hooks/use-mobile";
 
-type View = "overview" | "generate" | "records" | "tracking"
+type View = "overview" | "generate" | "records" | "tracking";
 
 interface DashboardLayoutProps {
-  children: ReactNode
-  currentView: View
-  onNavigate: (view: View) => void
+  children: ReactNode;
+  currentView: View;
+  onNavigate: (view: View) => void;
 }
 
-export function DashboardLayout({ children, currentView, onNavigate }: DashboardLayoutProps) {
-  const isMobile = useMobile()
+export function DashboardLayout({
+  children,
+  currentView,
+  onNavigate,
+}: DashboardLayoutProps) {
+  const isMobile = useMobile();
 
   const menuItems = [
     { icon: BarChart3, label: "Overview", value: "overview" },
     { icon: QrCode, label: "Generate QR Code", value: "generate" },
     { icon: ClipboardList, label: "Attendance Records", value: "records" },
     { icon: AlertTriangle, label: "Absence Tracking", value: "tracking" },
-  ]
+  ];
 
   const renderMenu = () => (
     <SidebarMenu>
       {menuItems.map((item) => (
         <SidebarMenuItem key={item.value}>
-          <SidebarMenuButton isActive={currentView === item.value} onClick={() => onNavigate(item.value as View)}>
+          <SidebarMenuButton
+            isActive={currentView === item.value}
+            onClick={() => onNavigate(item.value as View)}
+          >
             <item.icon className="h-5 w-5" />
             <span>{item.label}</span>
           </SidebarMenuButton>
         </SidebarMenuItem>
       ))}
     </SidebarMenu>
-  )
+  );
 
   if (isMobile) {
     return (
@@ -70,7 +85,9 @@ export function DashboardLayout({ children, currentView, onNavigate }: Dashboard
                     </Avatar>
                     <div>
                       <p className="font-medium">Dr. Smith</p>
-                      <p className="text-sm text-muted-foreground">Computer Science</p>
+                      <p className="text-sm text-muted-foreground">
+                        Computer Science
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -103,7 +120,7 @@ export function DashboardLayout({ children, currentView, onNavigate }: Dashboard
         </header>
         <main className="flex-1 p-4">{children}</main>
       </div>
-    )
+    );
   }
 
   return (
@@ -118,7 +135,9 @@ export function DashboardLayout({ children, currentView, onNavigate }: Dashboard
               </Avatar>
               <div>
                 <p className="font-medium">Dr. Smith</p>
-                <p className="text-sm text-muted-foreground">Computer Science</p>
+                <p className="text-sm text-muted-foreground">
+                  Computer Science
+                </p>
               </div>
             </div>
           </SidebarHeader>
@@ -143,11 +162,13 @@ export function DashboardLayout({ children, currentView, onNavigate }: Dashboard
         <div className="flex-1">
           <header className="border-b bg-background px-6 py-3 flex items-center">
             <SidebarTrigger className="mr-2" />
-            <h1 className="text-xl font-semibold">{menuItems.find((item) => item.value === currentView)?.label}</h1>
+            <h1 className="text-xl font-semibold">
+              {menuItems.find((item) => item.value === currentView)?.label}
+            </h1>
           </header>
           <main className="p-6">{children}</main>
         </div>
       </div>
     </SidebarProvider>
-  )
+  );
 }
