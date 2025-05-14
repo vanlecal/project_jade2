@@ -1,5 +1,6 @@
 //1
 import type { JSX, ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   BarChart3,
   QrCode,
@@ -51,6 +52,7 @@ export function DashboardLayout({
   const isMobile = useIsMobile();
 
   const [lecturerName, setLecturerName] = useState("");
+  const navigate = useNavigate();
 
   const menuItems: MenuItem[] = [
     { icon: BarChart3, label: "Overview", value: "overview" },
@@ -58,6 +60,13 @@ export function DashboardLayout({
     { icon: ClipboardList, label: "Attendance Records", value: "records" },
     { icon: AlertTriangle, label: "Absence Tracking", value: "tracking" },
   ];
+
+  // Logout function
+  const handleLogout = () => {
+    console.log("Logout");
+    localStorage.removeItem("token");
+    navigate("/lecturer/login");
+  };
 
   useEffect(() => {
     const fetchLecturer = async () => {
@@ -181,7 +190,7 @@ export function DashboardLayout({
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton>
+                <SidebarMenuButton onClick={handleLogout}>
                   <LogOut className="h-5 w-5" />
                   <span>Logout</span>
                 </SidebarMenuButton>

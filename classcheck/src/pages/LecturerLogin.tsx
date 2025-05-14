@@ -35,7 +35,6 @@
 // import { postRequest } from "../utils/api";
 // import LoadingScreen from "../components/public/LoadingScreen"
 
-
 // const LecturerLogin = () => {
 //   const [email, setEmail] = useState("");
 //   const [password, setPassword] = useState("");
@@ -104,7 +103,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Mail, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
 
 const LecturerLogin = () => {
   const [email, setEmail] = useState("");
@@ -122,16 +121,17 @@ const LecturerLogin = () => {
       const response = await postRequest("lecturer/login", { email, password });
       localStorage.setItem("token", response.token);
       navigate("/lecturer/dashboard");
-    } catch (err: any) {
+    } catch (err: Error | unknown) {
       console.error("Login error:", err);
       setError(
-        err?.response?.data?.message || "Invalid credentials, please try again!"
+        err instanceof Error
+          ? err.message
+          : "Invalid credentials, please try again!"
       );
     } finally {
       setIsSubmitting(false);
     }
   };
-
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md shadow-md rounded-lg border">
@@ -169,9 +169,22 @@ const LecturerLogin = () => {
                 required
               />
             </div>
-            <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700" disabled={isSubmitting}>
+            <Button
+              type="submit"
+              className="w-full bg-indigo-600 hover:bg-indigo-700"
+              disabled={isSubmitting}
+            >
               {isSubmitting ? "Logging in..." : "Login"}
             </Button>
+            <div className="mt-4 text-center text-sm text-gray-600">
+              Create an account{" "}
+              <span
+                onClick={() => navigate("/lecturer/register")}
+                className="text-indigo-600 hover:text-indigo-800 cursor-pointer font-semibold underline"
+              >
+                Signup now
+              </span>
+            </div>
           </form>
         </CardContent>
       </Card>

@@ -61,6 +61,96 @@
 // export default QRScanner;
 
 // 2  QRScanner + GPS
+// import { useEffect, useRef, useState } from "react";
+// import { Html5QrcodeScanner } from "html5-qrcode";
+// import { postRequesttwo } from "../../utils/api";
+
+// const QRScanner = () => {
+//   const [message, setMessage] = useState("");
+//   const [scanned, setScanned] = useState(false);
+//   const [retryScanner, setRetryScanner] = useState(0); // trigger re-render
+//   const scannerRef = useRef<HTMLDivElement>(null);
+
+//   useEffect(() => {
+//     if (scannerRef.current && !scanned) {
+//       const scanner = new Html5QrcodeScanner(
+//         "qr-reader",
+//         { fps: 10, qrbox: 250 },
+//         false
+//       );
+
+//       scanner.render(
+//         async (decodedText) => {
+//           if (!scanned) {
+//             setScanned(true);
+//             await scanner.clear();
+
+//             navigator.geolocation.getCurrentPosition(
+//               async (position) => {
+//                 const { latitude, longitude } = position.coords;
+//                 alert(`Latitude: ${latitude}, Longitude: ${longitude}`);
+
+//                 try {
+//                   await postRequesttwo("student/attendance/scan", {
+//                     code: decodedText,
+//                     latitude,
+//                     longitude,
+//                   });
+//                   setMessage("✅ Attendance recorded!");
+//                 } catch (err: unknown) {
+//                   setMessage(
+//                     `❌ ${
+//                       err instanceof Error
+//                         ? err.message
+//                         : "Failed to record attendance"
+//                     }`
+//                   );
+//                 }
+//               },
+//               (error) => {
+//                 console.error("Geolocation error:", error);
+//                 setMessage(
+//                   "❌ Failed to get location. Please enable location services."
+//                 );
+//               }
+//             );
+//           }
+//         },
+//         (error) => {
+//           console.warn("QR Scan error:", error);
+//         }
+//       );
+
+//       return () => {
+//         void scanner.clear();
+//       };
+//     }
+//   }, [scanned, retryScanner]);
+//   const handleRetry = () => {
+//     setMessage("");
+//     setScanned(false);
+//     setRetryScanner((prev) => prev + 1); // trigger scanner re-render
+//   };
+
+//   return (
+//     <div>
+//       <div id="qr-reader" ref={scannerRef} />
+//       {message && <p className="mt-3">{message}</p>}
+//       {scanned && message.startsWith("❌") && (
+//         <button
+//           onClick={handleRetry}
+//           className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+//         >
+//           Retry
+//         </button>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default QRScanner;
+
+//3
 import { useEffect, useRef, useState } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { postRequesttwo } from "../../utils/api";
@@ -68,7 +158,7 @@ import { postRequesttwo } from "../../utils/api";
 const QRScanner = () => {
   const [message, setMessage] = useState("");
   const [scanned, setScanned] = useState(false);
-  const [retryScanner, setRetryScanner] = useState(0); // trigger re-render
+  const [retryScanner, setRetryScanner] = useState(0);
   const scannerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -126,22 +216,46 @@ const QRScanner = () => {
       };
     }
   }, [scanned, retryScanner]);
+
   const handleRetry = () => {
     setMessage("");
     setScanned(false);
-    setRetryScanner((prev) => prev + 1); // trigger scanner re-render
+    setRetryScanner((prev) => prev + 1);
+  };
+
+  const handleRefresh = () => {
+    window.location.reload();
   };
 
   return (
     <div>
       <div id="qr-reader" ref={scannerRef} />
       {message && <p className="mt-3">{message}</p>}
+
       {scanned && message.startsWith("❌") && (
+        <>
+          <button
+            onClick={handleRetry}
+            className="mt-2 mr-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Retry
+          </button>
+
+          <button
+            onClick={handleRefresh}
+            className="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+          >
+            Refresh Page
+          </button>
+        </>
+      )}
+
+      {scanned && message.startsWith("✅") && (
         <button
-          onClick={handleRetry}
-          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          onClick={handleRefresh}
+          className="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
         >
-          Retry
+          Refresh Page
         </button>
       )}
     </div>

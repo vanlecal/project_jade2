@@ -59,7 +59,7 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-
+// Student profile
 exports.getStudentProfile = async (req, res) => {
   try {
     const user = await User.findById(req.userId).select('-password');
@@ -165,7 +165,9 @@ exports.getStudentQrSessionsStatus = async (req, res) => {
     const sessionIds = sessions.map(session => session._id);
 
     // Find all QR sessions for these sessions
-    const qrSessions = await QrSession.find({ session: { $in: sessionIds } }).populate('session');
+    const qrSessions = await QrSession.find({ session: { $in: sessionIds } })
+      .populate('session')
+      .sort({ createdAt: -1 });    
 
     // Find all attendance records for this student
     const attendance = await Attendance.find({ student: studentId });

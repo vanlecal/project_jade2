@@ -57,7 +57,8 @@ const attendanceSchema = new mongoose.Schema({
   }
 });
 
-// Optional: create a 2dsphere index for location queries
 attendanceSchema.index({ coordinates: '2dsphere' });
+
+attendanceSchema.index({ student: 1, session: 1 }, { unique: true });
 
 module.exports = mongoose.model('Attendance', attendanceSchema);

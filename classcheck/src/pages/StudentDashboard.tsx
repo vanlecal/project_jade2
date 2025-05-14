@@ -220,6 +220,13 @@ const StudentDashboard = () => {
   const [showScanner, setShowScanner] = useState(false);
   const navigate = useNavigate();
 
+  // Logout function
+  const handleLogout = () => {
+    console.log("Logout");
+    localStorage.removeItem("token");
+    navigate("/student/login");
+  };
+
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
@@ -331,7 +338,7 @@ const StudentDashboard = () => {
         <div className="flex justify-between">
           <Button
             variant="destructive"
-            // onClick={handleLogout}
+            onClick={handleLogout}
             className="flex items-center gap-2"
           >
             <LogOut className="h-4 w-4" />

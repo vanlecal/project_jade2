@@ -266,10 +266,14 @@ const Home = () => {
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-4">
           <Button variant="ghost" asChild>
-            <Link to="/student/login">Student Login</Link>
+            <Link to="/student/login" className="!no-underline">
+              Student Login
+            </Link>
           </Button>
           <Button variant="ghost" asChild>
-            <Link to="/lecturer/login">Lecturer Login</Link>
+            <Link to="/lecturer/login" className="!no-underline">
+              Lecturer Login
+            </Link>
           </Button>
         </div>
         {/* Mobile Menu Toggle */}
@@ -285,13 +289,13 @@ const Home = () => {
             <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md z-50">
               <Link
                 to="/student/login"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 !no-underline"
               >
                 Student Login
               </Link>
               <Link
                 to="/lecturer/login"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 !no-underline"
               >
                 Lecturer Login
               </Link>
@@ -320,14 +324,18 @@ const Home = () => {
             alike.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 ">
-            <Button asChild size="lg" className="gap-2 bg-blue-300">
-              <Link to="/student/register">
+            <Button
+              asChild
+              size="lg"
+              className="gap-2 bg-blue-300 hover:bg-blue-400 transition-colors"
+            >
+              <Link to="/student/register" className="!no-underline">
                 <User className="w-4 h-4" />
                 Student Register
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="gap-2">
-              <Link to="/lecturer/register">
+              <Link to="/lecturer/register" className="!no-underline">
                 <School className="w-4 h-4" />
                 Lecturer Register
               </Link>
@@ -490,14 +498,18 @@ const Home = () => {
           seamless attendance management.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <Button asChild size="lg" className="gap-2 bg-blue-300">
-            <Link to="/student/register">
+          <Button
+            asChild
+            size="lg"
+            className="gap-2 bg-blue-300 hover:bg-blue-400 transition-colors"
+          >
+            <Link to="/student/register" className="!no-underline">
               <User className="w-4 h-4" />
               Student Register
             </Link>
           </Button>
           <Button asChild size="lg" variant="outline" className="gap-2">
-            <Link to="/lecturer/register">
+            <Link to="/lecturer/register" className="!no-underline">
               <School className="w-4 h-4" />
               Lecturer Register
             </Link>

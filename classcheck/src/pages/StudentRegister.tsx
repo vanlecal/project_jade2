@@ -525,6 +525,15 @@ const StudentRegister = () => {
             >
               Register
             </Button>
+            <div className="mt-4 text-center text-sm text-gray-600">
+              Already have an account?{" "}
+              <span
+                onClick={() => navigate("/student/login")}
+                className="text-indigo-600 hover:text-indigo-800 cursor-pointer font-semibold underline"
+              >
+                Log In
+              </span>
+            </div>
           </form>
         </CardContent>
       </Card>

@@ -108,7 +108,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const LecturerRegister = () => {
@@ -143,7 +149,9 @@ const LecturerRegister = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="bg-indigo-600 text-white">
-          <CardTitle className="text-center text-2xl font-bold">Lecturer Registration</CardTitle>
+          <CardTitle className="text-center text-2xl font-bold">
+            Lecturer Registration
+          </CardTitle>
         </CardHeader>
         <CardContent>
           {error && (
@@ -214,9 +222,21 @@ const LecturerRegister = () => {
               />
             </div>
 
-            <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700">
+            <Button
+              type="submit"
+              className="w-full bg-indigo-600 hover:bg-indigo-700"
+            >
               Register
             </Button>
+            <div className="mt-4 text-center text-sm text-gray-600">
+              Already have an account?{" "}
+              <span
+                onClick={() => navigate("/lecturer/login")}
+                className="text-indigo-600 hover:text-indigo-800 cursor-pointer font-semibold underline"
+              >
+                Log In
+              </span>
+            </div>
           </form>
         </CardContent>
       </Card>

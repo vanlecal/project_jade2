@@ -488,3 +488,52 @@ exports.getAbsenteesByLecturer = async (req, res) => {
   }
 };
 
+
+
+
+
+exports.getLecturerDashboardStats = async (req, res) => {
+  try {
+    const lecturerId = req.userId;
+
+    const totalSessions = await Session.countDocuments({ lecturer: lecturerId });
+
+    const sessions = await Session.find({ lecturer: lecturerId }).select('program');
+    const programIds = [...new Set(sessions.map(s => s.program))];
+
+    const totalStudents = await StudentUser.countDocuments({ program: { $in: programIds } });
+
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const todaysSessions = await Session.find({
+      lecturer: lecturerId,
+      createdAt: { $gte: startOfDay, $lte: endOfDay },
+    });
+
+    const todaysSessionsCount = todaysSessions.length;
+    const todaysSessionIds = todaysSessions.map(s => s._id);
+
+    const attendedStudentIds = await Attendance.find({
+      session: { $in: todaysSessionIds },
+    }).distinct('student');
+
+    const expectedStudentCount = await StudentUser.countDocuments({
+      program: { $in: programIds },
+    });
+
+    const absentCount = Math.max(expectedStudentCount - attendedStudentIds.length, 0);
+
+    res.json({
+      totalSessions,
+      totalStudents,
+      todaysSessions: todaysSessionsCount,
+      absentStudents: absentCount,
+    });
+  } catch (error) {
+    console.error('Lecturer dashboard stats error:', error.message);
+    res.status(500).json({ message: 'Failed to fetch dashboard statistics' });
+  }
+};

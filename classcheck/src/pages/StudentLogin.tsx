@@ -88,7 +88,6 @@
 
 // export default StudentLogin;
 
-
 //3
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -98,7 +97,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Mail, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
 
 const StudentLogin = () => {
   const [email, setEmail] = useState("");
@@ -116,11 +115,21 @@ const StudentLogin = () => {
       const response = await postRequest("student/login", { email, password });
       localStorage.setItem("token", response.token);
       navigate("/student/scan");
-    } catch (err: any) {
+    } catch (err: Error | unknown) {
       console.error("Login error:", err);
-      setError(
-        err?.response?.data?.message || "Invalid credentials, please try again!"
-      );
+      if (err instanceof Error) {
+        setError(err.message || "Invalid credentials, please try again!");
+      } else if (typeof err === "object" && err !== null && "response" in err) {
+        const errorResponse = err as {
+          response?: { data?: { message?: string } };
+        };
+        setError(
+          errorResponse.response?.data?.message ||
+            "Invalid credentials, please try again!"
+        );
+      } else {
+        setError("Invalid credentials, please try again!");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -163,14 +172,26 @@ const StudentLogin = () => {
                 required
               />
             </div>
-            <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700" disabled={isSubmitting}>
+            <Button
+              type="submit"
+              className="w-full bg-indigo-600 hover:bg-indigo-700"
+              disabled={isSubmitting}
+            >
               {isSubmitting ? "Logging in..." : "Login"}
             </Button>
+            <div className="mt-4 text-center text-sm text-gray-600">
+              Create an account{" "}
+              <span
+                onClick={() => navigate("/student/register")}
+                className="text-indigo-600 hover:text-indigo-800 cursor-pointer font-semibold underline"
+              >
+                Signup now
+              </span>
+            </div>
           </form>
         </CardContent>
       </Card>
     </div>
   );
 };
-
 export default StudentLogin;
