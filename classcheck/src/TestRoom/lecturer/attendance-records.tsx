@@ -1,79 +1,103 @@
 //1
-// import { useState, useEffect } from "react"
-// import { Button } from "@/components/ui/button"
-// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-// import { Input } from "@/components/ui/input"
-// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-// import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-// import { FileDown, Search } from "lucide-react"
-// import { Skeleton } from "@/components/ui/skeleton"
-// import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+// import { useState, useEffect } from "react";
+// import { Button } from "@/components/ui/button";
+// import {
+//   Card,
+//   CardContent,
+//   CardDescription,
+//   CardHeader,
+//   CardTitle,
+// } from "@/components/ui/card";
+// import { Input } from "@/components/ui/input";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
+// import {
+//   Table,
+//   TableBody,
+//   TableCell,
+//   TableHead,
+//   TableHeader,
+//   TableRow,
+// } from "@/components/ui/table";
+// import { FileDown, Search } from "lucide-react";
+// import { Skeleton } from "@/components/ui/skeleton";
+// import {
+//   Accordion,
+//   AccordionContent,
+//   AccordionItem,
+//   AccordionTrigger,
+// } from "@/components/ui/accordion";
 
 // // Define types for our data
 // type Session = {
-//   id: string
-//   title: string
-//   program: string
-//   date: string
-//   totalStudents: number
-//   attendees: number
-// }
+//   id: string;
+//   title: string;
+//   program: string;
+//   date: string;
+//   totalStudents: number;
+//   attendees: number;
+// };
 
 // type Student = {
-//   id: string
-//   name: string
-//   index: string
-//   gps: string
-//   time: string
-// }
+//   id: string;
+//   name: string;
+//   index: string;
+//   gps: string;
+//   time: string;
+// };
 
 // type AttendanceData = {
-//   sessions: Session[]
+//   sessions: Session[];
 //   studentAttendance: {
-//     [key: string]: Student[]
-//   }
-// }
+//     [key: string]: Student[];
+//   };
+// };
 
 // export function AttendanceRecords() {
-//   const [searchQuery, setSearchQuery] = useState("")
-//   const [data, setData] = useState<AttendanceData | null>(null)
-//   const [loading, setLoading] = useState(true)
-//   const [error, setError] = useState<string | null>(null)
-//   const [selectedSession, setSelectedSession] = useState<string | null>(null)
+//   const [searchQuery, setSearchQuery] = useState("");
+//   const [data, setData] = useState<AttendanceData | null>(null);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState<string | null>(null);
+//   const [selectedSession, setSelectedSession] = useState<string | null>(null);
 
 //   useEffect(() => {
 //     async function fetchData() {
 //       try {
-//         setLoading(true)
-//         const response = await fetch("/data/attendance-data.json")
+//         setLoading(true);
+//         const response = await fetch("/data/attendance-data.json");
 
 //         if (!response.ok) {
-//           throw new Error("Failed to fetch attendance data")
+//           throw new Error("Failed to fetch attendance data");
 //         }
 
-//         const jsonData = await response.json()
-//         setData(jsonData)
+//         const jsonData = await response.json();
+//         setData(jsonData);
 //       } catch (err) {
-//         console.error("Error fetching attendance data:", err)
-//         setError("Failed to load attendance data. Please try again later.")
+//         console.error("Error fetching attendance data:", err);
+//         setError("Failed to load attendance data. Please try again later.");
 //       } finally {
-//         setLoading(false)
+//         setLoading(false);
 //       }
 //     }
 
-//     fetchData()
-//   }, [])
+//     fetchData();
+//   }, []);
 
 //   // Filter students based on search query
 //   const filterStudents = (students: Student[]) => {
-//     if (!searchQuery) return students
+//     if (!searchQuery) return students;
 
 //     return students.filter(
 //       (student) =>
 //         student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//         student.index.toLowerCase().includes(searchQuery.toLowerCase()),
-//     )
-//   }
+//         student.index.toLowerCase().includes(searchQuery.toLowerCase())
+//     );
+//   };
 
 //   if (error) {
 //     return (
@@ -81,33 +105,40 @@
 //         <Card>
 //           <CardHeader>
 //             <CardTitle>Attendance Records</CardTitle>
-//             <CardDescription>View and manage attendance records for your sessions.</CardDescription>
+//             <CardDescription>
+//               View and manage attendance records for your sessions.
+//             </CardDescription>
 //           </CardHeader>
 //           <CardContent>
 //             <div className="text-center py-6 text-destructive">{error}</div>
 //           </CardContent>
 //         </Card>
 //       </div>
-//     )
+//     );
 //   }
 
 //   // Render a specific session if selected
 //   if (selectedSession && data) {
-//     const session = data.sessions.find((s) => s.id === selectedSession)
-//     const students = data.studentAttendance[selectedSession] || []
-//     const filteredStudents = filterStudents(students)
+//     const session = data.sessions.find((s) => s.id === selectedSession);
+//     const students = data.studentAttendance[selectedSession] || [];
+//     const filteredStudents = filterStudents(students);
 
 //     return (
 //       <div className="space-y-6">
 //         <Card>
 //           <CardHeader>
 //             <CardTitle>Attendance Records</CardTitle>
-//             <CardDescription>View and manage attendance records for your sessions.</CardDescription>
+//             <CardDescription>
+//               View and manage attendance records for your sessions.
+//             </CardDescription>
 //           </CardHeader>
 //           <CardContent>
 //             <div className="flex flex-col gap-4 md:flex-row md:items-end">
 //               <div className="flex-1 space-y-2">
-//                 <Select value={selectedSession} onValueChange={setSelectedSession}>
+//                 <Select
+//                   value={selectedSession}
+//                   onValueChange={setSelectedSession}
+//                 >
 //                   <SelectTrigger>
 //                     <SelectValue placeholder="Select a session" />
 //                   </SelectTrigger>
@@ -115,7 +146,8 @@
 //                     <SelectItem value="all">All Sessions</SelectItem>
 //                     {data.sessions.map((session) => (
 //                       <SelectItem key={session.id} value={session.id}>
-//                         {session.title} - {new Date(session.date).toLocaleDateString()}
+//                         {session.title} -{" "}
+//                         {new Date(session.date).toLocaleDateString()}
 //                       </SelectItem>
 //                     ))}
 //                   </SelectContent>
@@ -142,7 +174,8 @@
 //           <CardHeader>
 //             <CardTitle>{session?.title}</CardTitle>
 //             <CardDescription>
-//               {session?.program} - {new Date(session?.date || "").toLocaleDateString()}
+//               {session?.program} -{" "}
+//               {new Date(session?.date || "").toLocaleDateString()}
 //             </CardDescription>
 //           </CardHeader>
 //           <CardContent>
@@ -158,7 +191,9 @@
 //               <TableBody>
 //                 {filteredStudents.map((student) => (
 //                   <TableRow key={student.id}>
-//                     <TableCell className="font-medium">{student.name}</TableCell>
+//                     <TableCell className="font-medium">
+//                       {student.name}
+//                     </TableCell>
 //                     <TableCell>{student.index}</TableCell>
 //                     <TableCell>{student.gps}</TableCell>
 //                     <TableCell>{student.time}</TableCell>
@@ -174,7 +209,7 @@
 //           </CardContent>
 //         </Card>
 //       </div>
-//     )
+//     );
 //   }
 
 //   return (
@@ -182,7 +217,9 @@
 //       <Card>
 //         <CardHeader>
 //           <CardTitle>Attendance Records</CardTitle>
-//           <CardDescription>View and manage attendance records for your sessions.</CardDescription>
+//           <CardDescription>
+//             View and manage attendance records for your sessions.
+//           </CardDescription>
 //         </CardHeader>
 //         <CardContent>
 //           <div className="flex flex-col gap-4 md:flex-row md:items-end">
@@ -192,7 +229,9 @@
 //               ) : (
 //                 <Select
 //                   value={selectedSession || "all"}
-//                   onValueChange={(value) => setSelectedSession(value === "all" ? null : value)}
+//                   onValueChange={(value) =>
+//                     setSelectedSession(value === "all" ? null : value)
+//                   }
 //                 >
 //                   <SelectTrigger>
 //                     <SelectValue placeholder="All Sessions" />
@@ -201,7 +240,8 @@
 //                     <SelectItem value="all">All Sessions</SelectItem>
 //                     {data?.sessions.map((session) => (
 //                       <SelectItem key={session.id} value={session.id}>
-//                         {session.title} - {new Date(session.date).toLocaleDateString()}
+//                         {session.title} -{" "}
+//                         {new Date(session.date).toLocaleDateString()}
 //                       </SelectItem>
 //                     ))}
 //                   </SelectContent>
@@ -218,7 +258,12 @@
 //                 disabled={loading}
 //               />
 //             </div>
-//             <Button variant="outline" size="icon" className="shrink-0" disabled={loading}>
+//             <Button
+//               variant="outline"
+//               size="icon"
+//               className="shrink-0"
+//               disabled={loading}
+//             >
 //               <FileDown className="h-4 w-4" />
 //               <span className="sr-only">Download</span>
 //             </Button>
@@ -243,22 +288,34 @@
 //           </Card>
 //         ))
 //       ) : (
-//         <Accordion type="multiple" defaultValue={data?.sessions.map((s) => s.id) || []}>
+//         <Accordion
+//           type="multiple"
+//           defaultValue={data?.sessions.map((s) => s.id) || []}
+//         >
 //           {data?.sessions.map((session) => {
-//             const students = data.studentAttendance[session.id] || []
-//             const filteredStudents = filterStudents(students)
+//             const students = data.studentAttendance[session.id] || [];
+//             const filteredStudents = filterStudents(students);
 
 //             return (
-//               <AccordionItem key={session.id} value={session.id} className="mb-4 border rounded-lg overflow-hidden">
+//               <AccordionItem
+//                 key={session.id}
+//                 value={session.id}
+//                 className="mb-4 border rounded-lg overflow-hidden"
+//               >
 //                 <Card>
 //                   <CardHeader className="p-0">
 //                     <AccordionTrigger className="px-6 py-4 hover:no-underline">
 //                       <div className="flex flex-col items-start text-left">
 //                         <CardTitle>{session.title}</CardTitle>
 //                         <CardDescription>
-//                           {session.program} - {new Date(session.date).toLocaleDateString()} - Attendance:{" "}
-//                           {session.attendees}/{session.totalStudents}(
-//                           {Math.round((session.attendees / session.totalStudents) * 100)}%)
+//                           {session.program} -{" "}
+//                           {new Date(session.date).toLocaleDateString()} -
+//                           Attendance: {session.attendees}/
+//                           {session.totalStudents}(
+//                           {Math.round(
+//                             (session.attendees / session.totalStudents) * 100
+//                           )}
+//                           %)
 //                         </CardDescription>
 //                       </div>
 //                     </AccordionTrigger>
@@ -277,7 +334,9 @@
 //                         <TableBody>
 //                           {filteredStudents.map((student) => (
 //                             <TableRow key={student.id}>
-//                               <TableCell className="font-medium">{student.name}</TableCell>
+//                               <TableCell className="font-medium">
+//                                 {student.name}
+//                               </TableCell>
 //                               <TableCell>{student.index}</TableCell>
 //                               <TableCell>{student.gps}</TableCell>
 //                               <TableCell>{student.time}</TableCell>
@@ -294,13 +353,14 @@
 //                   </AccordionContent>
 //                 </Card>
 //               </AccordionItem>
-//             )
+//             );
 //           })}
 //         </Accordion>
 //       )}
 //     </div>
-//   )
+//   );
 // }
+
 
 //2
 import { useEffect, useState } from "react";

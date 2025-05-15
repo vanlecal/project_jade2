@@ -222,7 +222,7 @@
 // };
 
 //3
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getRequest } from "../../utils/api";
 
 interface MissedSession {

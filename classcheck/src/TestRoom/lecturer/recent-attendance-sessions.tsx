@@ -171,9 +171,12 @@ import { FileDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getRequest } from "@/utils/api";
+import Papa from "papaparse";
+import { saveAs } from "file-saver";
 
 type Session = {
   id: string;
+  _id: string;
   title: string;
   program: string;
   date: string;
@@ -211,6 +214,43 @@ export function RecentAttendanceSessions() {
 
     fetchSessions();
   }, []);
+
+  async function downloadCSV(sessionId: string, sessionTitle: string) {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("No token found");
+      return;
+    }
+
+    try {
+      const data = await getRequest(`lecturer/attendance/${sessionId}`, token);
+
+      if (!Array.isArray(data) || data.length === 0) {
+        alert("No attendance data found.");
+        return;
+      }
+
+      const attendanceRecords = data.map((record: any) => ({
+        Name: record.student.name,
+        Email: record.student.email,
+        Index: record.student.index,
+        Phone: record.student.phone,
+        Sex: record.student.sex,
+        Program: record.student.program,
+        ScannedAt: new Date(record.scannedAt).toLocaleString(),
+        Location: record.location,
+      }));
+
+      const csv = Papa.unparse(attendanceRecords);
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+
+      const filename = `${sessionTitle.replace(/\s+/g, "_")}_attendance.csv`;
+      saveAs(blob, filename);
+    } catch (err) {
+      console.error("Download failed:", err);
+      alert("Failed to download attendance.");
+    }
+  }
 
   if (error) {
     return (
@@ -287,7 +327,11 @@ export function RecentAttendanceSessions() {
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex gap-2">
-                    <Button variant="ghost" size="icon">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => downloadCSV(session._id, session.title)}
+                    >
                       <FileDown className="h-4 w-4" />
                       <span className="sr-only">Download</span>
                     </Button>
