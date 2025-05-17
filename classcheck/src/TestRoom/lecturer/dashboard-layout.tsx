@@ -30,7 +30,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useEffect, useState } from "react";
 import { getRequest } from "../../utils/api";
 
-type View = "overview" | "generate" | "records" | "tracking";
+type View = "overview" | "generate" | "records" | "tracking" | "myprofile";
 
 interface MenuItem {
   icon: React.ElementType;
@@ -83,11 +83,12 @@ export function DashboardLayout({
           "Error fetching lecturer info:",
           error instanceof Error ? error.message : error
         );
+        navigate("/lecturer/login");
       }
     };
 
     fetchLecturer();
-  }, []);
+  }, [navigate]);
 
   const renderMenu = (): JSX.Element => (
     <SidebarMenu>
@@ -184,10 +185,10 @@ export function DashboardLayout({
           <SidebarFooter>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton>
+                <SidebarMenuButton onClick={() => onNavigate("myprofile")}>
                   <User className="h-5 w-5" />
                   <span>Profile</span>
-                </SidebarMenuButton>
+                </SidebarMenuButton>{" "}
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton onClick={handleLogout}>

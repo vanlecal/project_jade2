@@ -222,8 +222,10 @@
 // };
 
 //3
+import { useRequireAuth } from "@/utils/useRequireAuth";
 import { useEffect, useState } from "react";
 import { getRequest } from "../../utils/api";
+import LoadingScreen from "@/components/public/LoadingScreen";
 
 interface MissedSession {
   title: string;
@@ -272,6 +274,7 @@ export function StudentTracking() {
     };
     fetchAbsentees();
   }, []);
+  useRequireAuth();
 
   const filteredAbsentees = filteredProgram
     ? absentees.filter(
@@ -287,7 +290,12 @@ export function StudentTracking() {
     return "bg-gray-600";
   };
 
-  if (loading) return <p>Loading absentee summary...</p>;
+  if (loading)
+    return (
+      <p>
+        <LoadingScreen />
+      </p>
+    );
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (

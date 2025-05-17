@@ -361,8 +361,9 @@
 //   );
 // }
 
-
 //2
+import { useNavigate } from "react-router-dom";
+import { useRequireAuth } from "@/utils/useRequireAuth";
 import { useEffect, useState } from "react";
 import { getRequest } from "../../utils/api";
 import { Card, CardContent } from "@/components/ui/card";
@@ -392,6 +393,7 @@ interface AttendanceRecord {
 
 export function AttendanceRecords() {
   const [sessions, setSessions] = useState<QrSession[]>([]);
+  const navigate = useNavigate();
   const [expandedSessionId, setExpandedSessionId] = useState<string | null>(
     null
   );
@@ -413,7 +415,8 @@ export function AttendanceRecords() {
       }
     };
     fetchSessions();
-  }, []);
+  }, [navigate]);
+  useRequireAuth();
 
   const toggleSession = async (sessionId: string) => {
     if (expandedSessionId === sessionId) {

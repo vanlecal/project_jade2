@@ -4,8 +4,9 @@ import { DashboardOverview } from "./dashboard-overview";
 import { QrCodeGenerator } from "./qr-code-generator";
 import { AttendanceRecords } from "./attendance-records";
 import { StudentTracking } from "./student-tracking";
+import LecturerProfile from "./LecturerProfile";
 
-type View = "overview" | "generate" | "records" | "tracking";
+type View = "overview" | "generate" | "records" | "tracking" | "myprofile";
 
 export default function DashboardPage() {
   const [currentView, setCurrentView] = useState<View>("overview");
@@ -16,6 +17,7 @@ export default function DashboardPage() {
       {currentView === "generate" && <QrCodeGenerator />}
       {currentView === "records" && <AttendanceRecords />}
       {currentView === "tracking" && <StudentTracking />}
+      {currentView === "myprofile" && <LecturerProfile />}
     </DashboardLayout>
   );
 }

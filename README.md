@@ -4,3 +4,6 @@ cd classcheck
 
 cd backend
 nodemon server.js
+
+
+localStorage.removeItem('token');

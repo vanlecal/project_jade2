@@ -65,7 +65,7 @@ export const postRequesttwo = async (endpoint: string, data: object) => {
     }
   }
 };
-// User data get request
+// User data get request default
 const getRequest = async (endpoint: string, token?: string) => {
   try {
     const response = await axios.get(`${API_URL}/${endpoint}`, {

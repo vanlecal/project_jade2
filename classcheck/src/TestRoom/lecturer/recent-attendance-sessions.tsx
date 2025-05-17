@@ -173,6 +173,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getRequest } from "@/utils/api";
 import Papa from "papaparse";
 import { saveAs } from "file-saver";
+import { useRequireAuth } from "@/utils/useRequireAuth";
 
 type Session = {
   id: string;
@@ -182,7 +183,7 @@ type Session = {
   date: string;
   createdAt: string;
   totalStudents: number;
-  attendees: number;
+  attendeeCount: number;
 };
 
 export function RecentAttendanceSessions() {
@@ -200,7 +201,6 @@ export function RecentAttendanceSessions() {
           return;
         }
         const response = await getRequest("lecturer/sessions", token);
-        console.log(response);
 
         const data = await response;
         setSessions(data);
@@ -214,6 +214,7 @@ export function RecentAttendanceSessions() {
 
     fetchSessions();
   }, []);
+  useRequireAuth();
 
   async function downloadCSV(sessionId: string, sessionTitle: string) {
     const token = localStorage.getItem("token");
@@ -230,7 +231,20 @@ export function RecentAttendanceSessions() {
         return;
       }
 
-      const attendanceRecords = data.map((record: any) => ({
+      interface AttendanceRecord {
+        student: {
+          name: string;
+          email: string;
+          index: string;
+          phone: string;
+          sex: string;
+          program: string;
+        };
+        scannedAt: string;
+        location: string;
+      }
+
+      const attendanceRecords = data.map((record: AttendanceRecord) => ({
         Name: record.student.name,
         Email: record.student.email,
         Index: record.student.index,
@@ -251,7 +265,6 @@ export function RecentAttendanceSessions() {
       alert("Failed to download attendance.");
     }
   }
-
   if (error) {
     return (
       <Card>
@@ -316,11 +329,11 @@ export function RecentAttendanceSessions() {
                   {new Date(session.createdAt).toLocaleDateString()}
                 </TableCell>
                 <TableCell>
-                  {session.attendees}/{session.totalStudents}
+                  {session.attendeeCount}/{session.totalStudents}
                   <span className="ml-2 text-xs text-muted-foreground">
                     (
                     {Math.round(
-                      (session.attendees / session.totalStudents) * 100
+                      (session.attendeeCount / session.totalStudents) * 100
                     )}
                     %)
                   </span>

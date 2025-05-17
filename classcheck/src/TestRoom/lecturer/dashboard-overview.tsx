@@ -194,9 +194,58 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CalendarDays, Users, Clock, AlertCircle } from "lucide-react";
 import { RecentAttendanceSessions } from "./recent-attendance-sessions";
-import LecturerStats from "../LecturerStats";
+import { useEffect, useState } from "react";
+import { getRequest } from "../../utils/api";
+import { useNavigate } from "react-router-dom";
+
+interface DashboardStats {
+  totalSessions: number;
+  totalStudents: number;
+  todaysSessions: number;
+  absentStudents: number;
+  lastSessionTitle: string;
+}
 
 export function DashboardOverview() {
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchDashboardStats = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) throw new Error("Authentication token not found");
+
+        const response = await getRequest("lecturer/dashboard-stats", token);
+        setStats(response);
+      } catch (err: unknown) {
+        const errorMessage =
+          err instanceof Error ? err.message : "An unexpected error occurred.";
+        console.error("Error fetching dashboard stats:", errorMessage);
+        setError(errorMessage);
+
+        // Optional: Handle 401 Unauthorized explicitly if your backend returns a status code
+        if (
+          (err as { response?: { status: number } })?.response?.status ===
+            401 ||
+          errorMessage.includes("401") ||
+          errorMessage.includes("token")
+        ) {
+          localStorage.removeItem("token"); // Clear the invalid token
+          navigate("/lecturer/login"); // Redirect to login
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDashboardStats();
+  }, [navigate]);
+
+  if (loading) return <p className="text-gray-600">Loading dashboard...</p>;
+  if (error) return <p className="text-red-600">{error}</p>;
+
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -208,8 +257,8 @@ export function DashboardOverview() {
             <CalendarDays className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">24</div>
-            <p className="text-xs text-muted-foreground">+2 from last week</p>
+            <div className="text-2xl font-bold">{stats?.totalSessions}</div>
+            <p className="text-xs text-muted-foreground">+ from last week</p>
           </CardContent>
         </Card>
         <Card>
@@ -220,8 +269,10 @@ export function DashboardOverview() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">145</div>
-            <p className="text-xs text-muted-foreground">Across 3 programs</p>
+            <div className="text-2xl font-bold">{stats?.totalStudents}</div>
+            <p className="text-xs text-muted-foreground">
+              Across 100% programs
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -232,8 +283,10 @@ export function DashboardOverview() {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">2</div>
-            <p className="text-xs text-muted-foreground">CS101, CS205</p>
+            <div className="text-2xl font-bold">{stats?.todaysSessions}</div>
+            <p className="text-xs text-muted-foreground">
+              Recently: {stats?.lastSessionTitle}
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -244,9 +297,9 @@ export function DashboardOverview() {
             <AlertCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">5</div>
+            <div className="text-2xl font-bold">{stats?.absentStudents}</div>
             <p className="text-xs text-muted-foreground">
-              Students with 3+ absences
+              Students with 1+ absences
             </p>
           </CardContent>
         </Card>
@@ -272,7 +325,6 @@ export function DashboardOverview() {
               <p className="text-sm text-muted-foreground">
                 No upcoming sessions scheduled.
               </p>
-              <LecturerStats />
             </CardContent>
           </Card>
         </TabsContent>
