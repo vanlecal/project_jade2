@@ -90,95 +90,95 @@
 // export default AbsentStudents;
 
 //2
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+// import React, { useEffect, useState } from "react";
+// import axios from "axios";
 
-interface MissedSession {
-  title: string;
-  date: string;
-}
+// interface MissedSession {
+//   title: string;
+//   date: string;
+// }
 
-interface Student {
-  name: string;
-  indexNumber: string;
-  program: string;
-}
+// interface Student {
+//   name: string;
+//   indexNumber: string;
+//   program: string;
+// }
 
-interface Absentee {
-  student: Student;
-  missedSessions: MissedSession[];
-}
+// interface Absentee {
+//   student: Student;
+//   missedSessions: MissedSession[];
+// }
 
-const AbsentSummaryTable: React.FC = () => {
-  const [absentees, setAbsentees] = useState<Absentee[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+// const AbsentSummaryTable: React.FC = () => {
+//   const [absentees, setAbsentees] = useState<Absentee[]>([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchAbsentees = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5000/api/lecturer/attendance/absentees/by-lecturer",
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        setAbsentees(response.data.absentees);
-      } catch (err: Error | unknown) {
-        setError(
-          err instanceof Error ? err.message : "Failed to fetch absentees"
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchAbsentees();
-  }, []);
+//   useEffect(() => {
+//     const fetchAbsentees = async () => {
+//       try {
+//         const response = await axios.get(
+//           "http://localhost:5000/api/lecturer/attendance/absentees/by-lecturer",
+//           {
+//             headers: {
+//               Authorization: `Bearer ${localStorage.getItem("token")}`,
+//             },
+//           }
+//         );
+//         setAbsentees(response.data.absentees);
+//       } catch (err: Error | unknown) {
+//         setError(
+//           err instanceof Error ? err.message : "Failed to fetch absentees"
+//         );
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+//     fetchAbsentees();
+//   }, []);
 
-  if (loading) return <p>Loading absentee summary...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+//   if (loading) return <p>Loading absentee summary...</p>;
+//   if (error) return <p className="text-red-500">{error}</p>;
 
-  return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Students with Missed Sessions</h2>
-      {absentees.length === 0 ? (
-        <p>No absentees found.</p>
-      ) : (
-        <table className="w-full border border-gray-300 table-auto">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="border px-4 py-2">Name</th>
-              <th className="border px-4 py-2">Index Number</th>
-              <th className="border px-4 py-2">Program</th>
-              <th className="border px-4 py-2">Missed Sessions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {absentees.map((absent, idx) => (
-              <tr key={idx}>
-                <td className="border px-4 py-2">{absent.student.name}</td>
-                <td className="border px-4 py-2">
-                  {absent.student.indexNumber}
-                </td>
-                <td className="border px-4 py-2">{absent.student.program}</td>
-                <td className="border px-4 py-2">
-                  <ul className="list-disc pl-4">
-                    {absent.missedSessions.map((session, sIdx) => (
-                      <li key={sIdx}>
-                        {session.title} ({session.date})
-                      </li>
-                    ))}
-                  </ul>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </div>
-  );
-};
+//   return (
+//     <div className="p-4">
+//       <h2 className="text-xl font-bold mb-4">Students with Missed Sessions</h2>
+//       {absentees.length === 0 ? (
+//         <p>No absentees found.</p>
+//       ) : (
+//         <table className="w-full border border-gray-300 table-auto">
+//           <thead className="bg-gray-100">
+//             <tr>
+//               <th className="border px-4 py-2">Name</th>
+//               <th className="border px-4 py-2">Index Number</th>
+//               <th className="border px-4 py-2">Program</th>
+//               <th className="border px-4 py-2">Missed Sessions</th>
+//             </tr>
+//           </thead>
+//           <tbody>
+//             {absentees.map((absent, idx) => (
+//               <tr key={idx}>
+//                 <td className="border px-4 py-2">{absent.student.name}</td>
+//                 <td className="border px-4 py-2">
+//                   {absent.student.indexNumber}
+//                 </td>
+//                 <td className="border px-4 py-2">{absent.student.program}</td>
+//                 <td className="border px-4 py-2">
+//                   <ul className="list-disc pl-4">
+//                     {absent.missedSessions.map((session, sIdx) => (
+//                       <li key={sIdx}>
+//                         {session.title} ({session.date})
+//                       </li>
+//                     ))}
+//                   </ul>
+//                 </td>
+//               </tr>
+//             ))}
+//           </tbody>
+//         </table>
+//       )}
+//     </div>
+//   );
+// };
 
-export default AbsentSummaryTable;
+// export default AbsentSummaryTable;

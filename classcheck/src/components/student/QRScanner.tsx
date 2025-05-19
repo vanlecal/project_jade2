@@ -236,14 +236,14 @@ const QRScanner = () => {
         <>
           <button
             onClick={handleRetry}
-            className="mt-2 mr-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="mt-2 mr-4 px-5 py-2.5 bg-slate-700 text-white rounded-xl shadow-sm hover:bg-slate-800 transition"
           >
             Retry
           </button>
 
           <button
             onClick={handleRefresh}
-            className="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+            className="mt-2 px-5 py-2.5 bg-indigo-600 text-white rounded-xl shadow-sm hover:bg-indigo-700 transition"
           >
             Refresh Page
           </button>

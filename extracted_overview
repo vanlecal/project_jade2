@@ -25,11 +25,13 @@ On scan: app captures their info + current GPS location and submits it to the ba
 Layer Tech
 Frontend Vite + React + TypeScript
 UI Bootstrap CSS
+ShadCN
 Backend Node.js + Express
 Auth JWT Authentication
 Database MongoDB
 QR Scanning Browser API / QR scanner lib
 GPS Browser Geolocation API
+Socket.io
 
 Student dashboard;
 

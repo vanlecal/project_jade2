@@ -257,30 +257,23 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getRequest } from "../utils/api";
 import LoadingScreen from "../components/public/LoadingScreen";
-import DashboardPage from "@/TestRoom/lecturer/dashboard-page";
+import DashboardPage from "@/components/lecturer/dashboard-page";
 
 const LecturerDashboard = () => {
-  const [lecturerName, setLecturerName] = useState("");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchLecturer = async () => {
       setLoading(true);
-      setError(null);
       try {
         const token = localStorage.getItem("token");
         if (!token) {
           throw new Error("No token found");
         }
 
-        const data = await getRequest("lecturer/me", token);
-        setLecturerName(data.name);
+        await getRequest("lecturer/me", token);
       } catch (err: unknown) {
-        const errorMessage =
-          err instanceof Error ? err.message : "Failed to fetch lecturer data";
-        setError(errorMessage);
         console.error("Error fetching lecturer info:", err);
         navigate("/lecturer/login");
       } finally {
@@ -303,5 +296,4 @@ const LecturerDashboard = () => {
     </div>
   );
 };
-
 export default LecturerDashboard;

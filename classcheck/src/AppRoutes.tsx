@@ -6,7 +6,7 @@ import LecturerLogin from "./pages/LecturerLogin";
 import LecturerRegister from "./pages/LecturerRegister";
 import LecturerDashboard from "./pages/LecturerDashboard";
 import StudentDashbboard from "./pages/StudentDashboard";
-import DashboardPage from "./TestRoom/lecturer/dashboard-page";
+import DashboardPage from "./components/lecturer/dashboard-page";
 
 function AppRoutes() {
   return (

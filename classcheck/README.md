@@ -1,54 +1,86 @@
-# React + TypeScript + Vite
+# ClassCheck Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This directory contains the frontend application for ClassCheck, a web application designed to track and manage class attendance efficiently.
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The ClassCheck frontend is built with modern web technologies to provide a responsive and intuitive user interface for attendance management.
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React.js with TypeScript
+- Vite for fast development and building
+- Tailwind CSS for styling
+- ShadCN UI components
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or higher recommended)
+- npm or yarn
+
+### Installation
+
+1. Install dependencies:
+
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Start the development server:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+npm run dev
 ```
+
+3. Build for production:
+
+```bash
+npm run build
+```
+
+## Project Structure
+
+- `src/` - Source code
+  - `components/` - Reusable UI components
+  - `pages/` - Application pages
+  - `hooks/` - Custom React hooks
+  - `context/` - React context providers
+  - `utils/` - Utility functions
+  - `types/` - TypeScript type definitions
+  - `assets/` - Static assets like images and icons
+
+## Features
+
+- Student attendance tracking interface
+- Real-time attendance updates via socket.io
+- Responsive design for desktop and mobile devices
+- User authentication and authorization
+- Interactive dashboards for attendance statistics
+
+## Development
+
+### Code Style
+
+This project uses ESLint and Prettier for code formatting and style enforcement.
+
+### Testing
+
+Run tests with:
+
+```bash
+npm test
+```
+
+## Connecting to Backend
+
+The frontend communicates with the backend API located in the `../backend` directory. Make sure the backend server is running when developing the frontend.
+
+## Contributing
+
+Please refer to the main project README for contribution guidelines.
+
+## License
+
+This project is licensed under the MIT License.
