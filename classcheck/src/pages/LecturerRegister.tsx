@@ -125,9 +125,11 @@ const LecturerRegister = () => {
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     try {
       const response = await postRequest("lecturer/register", {
@@ -142,6 +144,8 @@ const LecturerRegister = () => {
     } catch (err) {
       console.error("Registration error:", err);
       setError("Registration failed, please try again!");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -225,8 +229,9 @@ const LecturerRegister = () => {
             <Button
               type="submit"
               className="w-full bg-indigo-600 hover:bg-indigo-700"
+              disabled={isSubmitting}
             >
-              Register
+              {isSubmitting ? "Signing In..." : "Register"}
             </Button>
             <div className="mt-4 text-center text-sm text-gray-600">
               Already have an account?{" "}

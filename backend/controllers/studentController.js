@@ -150,40 +150,32 @@ exports.getAttendanceHistory = async (req, res) => {
 };
 
 
-const Student = require("../models/studentModel");
+const Student = require("../models/studentModel"); // Not Pratical, A VisionMark notice
+
 
 exports.getStudentQrSessionsStatus = async (req, res) => {
   try {
     const studentId = req.userId;
 
-    // ✅ Use the Student model here
     const studentData = await Student.findById(studentId);
     if (!studentData) return res.status(404).json({ message: 'Student not found' });
 
-    // Find all sessions for this program
     const sessions = await Session.find({ program: studentData.program });
-    const sessionIds = sessions.map(session => session._id);
 
-    // Find all QR sessions for these sessions
-    const qrSessions = await QrSession.find({ session: { $in: sessionIds } })
-      .populate('session')
-      .sort({ createdAt: -1 });    
-
-    // Find all attendance records for this student
     const attendance = await Attendance.find({ student: studentId });
-    const attendedSessionIds = attendance.map(att => att.session.toString());
+    const attendedSessionIds = new Set(attendance.map(att => att.session.toString()));
 
-    // Format the results
-    const response = qrSessions.map(qr => ({
-      qrCode: qr.code,
-      sessionTitle: qr.session.title,
-      sessionId: qr.session._id,
-      expiresAt: qr.expiresAt,
-      createdAt: qr.createdAt,
-      attended: attendedSessionIds.includes(qr.session._id.toString()),
-
-      
+    // Map the sessions
+    let response = sessions.map(session => ({
+      sessionTitle: session.title,
+      sessionId: session._id,
+      qrCode: session._id, // Optional, can be removed or updated based on your real data
+      attended: attendedSessionIds.has(session._id.toString()),
+      createdAt: session.createdAt,
     }));
+
+    // Sort in descending order of creation time (LIFO)
+    response.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     res.json({ sessions: response });
   } catch (error) {
@@ -191,3 +183,4 @@ exports.getStudentQrSessionsStatus = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
