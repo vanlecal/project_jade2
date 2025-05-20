@@ -22,7 +22,8 @@
 
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api';
+// const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://project-jade-1.onrender.com/api';
 
 // const API_URL = 'https://6ctr1tjt-5000.uks1.devtunnels.ms/api';
 

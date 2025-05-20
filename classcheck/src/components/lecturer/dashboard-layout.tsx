@@ -126,7 +126,7 @@ export function DashboardLayout({
                       <AvatarFallback>LC</AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-medium">Dr. Smith</p>
+                      <p className="font-medium">Dr.{lecturerName || "Loading..."}</p>
                       <p className="text-sm text-muted-foreground">
                         Computer Science
                       </p>

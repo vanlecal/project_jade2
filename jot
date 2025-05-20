@@ -3,3 +3,6 @@ Frontend: Vercel or Netlify
 Backend: Render or Railway
 
 Database: MongoDB Atlas
+
+backend url;
+https://project-jade-1.onrender.com

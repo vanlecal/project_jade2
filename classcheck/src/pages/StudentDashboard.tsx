@@ -304,7 +304,7 @@ const StudentDashboard = () => {
           <CardContent className="flex flex-col items-center justify-center py-10">
             {!showScanner && (
               <div>
-                <div className="ml-4">
+                <div className="ml-12">
                   <Button
                     onClick={() => setShowScanner(true)}
                     size="lg"
