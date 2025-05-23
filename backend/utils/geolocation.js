@@ -5,7 +5,7 @@ const getHumanReadableLocation = async (latitude, longitude) => {
   try {
     const result = await opencage.geocode({
       q: `${latitude},${longitude}`,
-      key: process.env.OPENCAGE_API_KEY, // Make sure it's stored in .env
+      key: process.env.OPENCAGE_API_KEY,
       language: 'en',
     });
 

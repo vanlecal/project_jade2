@@ -1,25 +1,3 @@
-// import axios from 'axios';
-
-// const API_URL = 'http://localhost:5000/api'; // Replace with your actual backend URL
-
-// export const postRequest = async (endpoint: string, data: object) => {
-//   try {
-//     const response = await axios.post(`${API_URL}/${endpoint}`, data);
-//     return response.data;
-//   } catch (error: unknown) {
-//     console.error('API Error:', error);
-
-//     if (axios.isAxiosError(error) && error.response) {
-//       throw error.response.data;
-//     } else {
-//       throw new Error('Something went wrong!');
-//     }
-//   }
-// };
-
-
-
-
 import axios from 'axios';
 
 // const API_URL = 'http://localhost:5000/api';

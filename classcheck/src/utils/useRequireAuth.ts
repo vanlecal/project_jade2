@@ -1,4 +1,4 @@
-// hooks/useRequireAuth.ts
+// useRequireAuth.ts => function like a hooks
 import { useEffect } from "react";
 
 export const useRequireAuth = () => {

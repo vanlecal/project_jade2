@@ -169,7 +169,7 @@ exports.getStudentQrSessionsStatus = async (req, res) => {
     let response = sessions.map(session => ({
       sessionTitle: session.title,
       sessionId: session._id,
-      qrCode: session._id, // Optional, can be removed or updated based on your real data
+      qrCode: session._id,
       attended: attendedSessionIds.has(session._id.toString()),
       createdAt: session.createdAt,
     }));
