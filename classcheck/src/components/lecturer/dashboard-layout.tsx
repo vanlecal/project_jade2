@@ -173,7 +173,7 @@ export function DashboardLayout({
             <div className="flex items-center gap-2">
               <Avatar>
                 <AvatarImage src="/placeholder-user.jpg" alt="User" />
-                <AvatarFallback>1</AvatarFallback>
+                <AvatarFallback>{lecturerName.charAt(0)}</AvatarFallback>
               </Avatar>
               <div>
                 <p className="font-medium">Dr.{lecturerName || "Loading..."}</p>

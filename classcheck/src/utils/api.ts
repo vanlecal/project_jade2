@@ -1,9 +1,16 @@
 import axios from 'axios';
 
 // const API_URL = 'http://localhost:5000/api';
-const API_URL = 'https://project-jade-1.onrender.com/api';
+// const API_URL = 'https://project-jade-1.onrender.com/api';
 
-// const API_URL = 'https://6ctr1tjt-5000.uks1.devtunnels.ms/api';
+const API_URL = import.meta.env.VITE_API_URL as string;
+
+//Checking for API_URI variable
+if (!API_URL) {
+  throw new Error("VITE_API_URL is not defined in the environment variables.");
+}
+
+
 
 // User data post request run on authentication
 const postRequest = async (endpoint: string, data: object) => {

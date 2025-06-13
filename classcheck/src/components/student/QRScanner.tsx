@@ -12,7 +12,16 @@ const QRScanner = () => {
     if (scannerRef.current && !scanned) {
       const scanner = new Html5QrcodeScanner(
         "qr-reader",
-        { fps: 10, qrbox: 250 },
+        {
+          fps: 10,
+          qrbox: 250,
+          aspectRatio: 1.333334,
+          videoConstraints: {
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+            facingMode: "environment", // better quality for rear camera
+          },
+        },
         false
       );
 
