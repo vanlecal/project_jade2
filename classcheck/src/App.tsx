@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from "react";
+import { Suspense, lazy } from "react";
 import LoadingScreen from "./components/public/LoadingScreen";
 
 const Home = lazy(() => import("./AppRoutes"));

@@ -123,10 +123,12 @@ export function DashboardLayout({
                   <div className="flex items-center gap-2">
                     <Avatar>
                       <AvatarImage src="/placeholder-user.jpg" alt="User" />
-                      <AvatarFallback>LC</AvatarFallback>
+                      <AvatarFallback>{lecturerName.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-medium">Dr.{lecturerName || "Loading..."}</p>
+                      <p className="font-medium">
+                        Dr.{lecturerName || "Loading..."}
+                      </p>
                       <p className="text-sm text-muted-foreground">
                         Computer Science
                       </p>
@@ -157,7 +159,7 @@ export function DashboardLayout({
           </div>
           <Avatar className="h-8 w-8">
             <AvatarImage src="/placeholder-user.jpg" alt="User" />
-            <AvatarFallback>LC</AvatarFallback>
+            <AvatarFallback>{lecturerName.charAt(0)}</AvatarFallback>
           </Avatar>
         </header>
         <main className="flex-1 p-4">{children}</main>
