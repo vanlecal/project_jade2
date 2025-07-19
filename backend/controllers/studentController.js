@@ -75,6 +75,64 @@ exports.getStudentProfile = async (req, res) => {
 
 
 // attendance Controller 2 + GPS Test
+// exports.recordAttendance = async (req, res) => {
+//   try {
+//     const { code, latitude, longitude } = req.body;
+//     const studentId = req.userId;
+
+//     console.log('Received code:', code);
+//     console.log('Received studentId:', studentId);
+//     console.log('Received latitude:', latitude);
+//     console.log('Received longitude:', longitude);
+
+//     const qrSession = await QrSession.findOne({ code }).populate('session');
+//     if (!qrSession) return res.status(404).json({ message: 'Invalid QR code' });
+//     if (new Date() > qrSession.expiresAt) return res.status(410).json({ message: 'QR code expired' });
+
+//     const sessionId = qrSession.session._id;
+
+//     const alreadyMarked = await Attendance.findOne({ student: studentId, session: sessionId });
+//     if (alreadyMarked) return res.status(409).json({ message: 'Already marked present for this session' });
+
+//     // Convert lat/long to readable location
+//     const location = await getHumanReadableLocation(latitude, longitude);
+
+//     // Save attendance
+//     await Attendance.create({
+//       student: studentId,
+//       session: sessionId,
+//       scannedAt: new Date(),
+//       location,
+//       coordinates: {
+//         type: 'Point',
+//         coordinates: [longitude, latitude],
+//       }
+//     });
+
+//     res.status(200).json({ message: 'Attendance recorded successfully', location });
+//   } catch (err) {
+//     console.error('Attendance error:', err.message);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// };
+
+
+// 📍 Helper to calculate distance in meters using the Haversine formula
+function getDistanceFromLatLonInMeters(lat1, lon1, lat2, lon2) {
+  const R = 6371000; // Radius of Earth in meters
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
 exports.recordAttendance = async (req, res) => {
   try {
     const { code, latitude, longitude } = req.body;
@@ -86,18 +144,55 @@ exports.recordAttendance = async (req, res) => {
     console.log('Received longitude:', longitude);
 
     const qrSession = await QrSession.findOne({ code }).populate('session');
-    if (!qrSession) return res.status(404).json({ message: 'Invalid QR code' });
-    if (new Date() > qrSession.expiresAt) return res.status(410).json({ message: 'QR code expired' });
+    if (!qrSession)
+      return res.status(404).json({ message: 'Invalid QR code' });
 
-    const sessionId = qrSession.session._id;
+    if (new Date() > qrSession.expiresAt)
+      return res.status(410).json({ message: 'QR code expired' });
 
-    const alreadyMarked = await Attendance.findOne({ student: studentId, session: sessionId });
-    if (alreadyMarked) return res.status(409).json({ message: 'Already marked present for this session' });
+    const session = qrSession.session;
+    const sessionId = session._id;
+
+    const alreadyMarked = await Attendance.findOne({
+      student: studentId,
+      session: sessionId,
+    });
+
+    if (alreadyMarked)
+      return res
+        .status(409)
+        .json({ message: 'Already marked present for this session' });
+
+    // Validate location distance (max 50 meters allowed)
+    const lecturerLat = session.location?.lat;
+    const lecturerLon = session.location?.lon;
+
+    if (!lecturerLat || !lecturerLon) {
+      return res.status(400).json({
+        message: 'Lecturer location not set. Cannot validate GPS range.',
+      });
+    }
+
+    const distance = getDistanceFromLatLonInMeters(
+      latitude,
+      longitude,
+      lecturerLat,
+      lecturerLon
+    );
+
+    //const MAX_DISTANCE = 50;
+    const MAX_DISTANCE = 0.03; // meters
+
+    if (distance > MAX_DISTANCE) {
+      return res.status(403).json({
+        message: `You are too far from the attendance location. Distance: ${distance.toFixed(2)} meters`,
+      });
+    }
 
     // Convert lat/long to readable location
     const location = await getHumanReadableLocation(latitude, longitude);
 
-    // Save attendance
+    // ✅ Save attendance
     await Attendance.create({
       student: studentId,
       session: sessionId,
@@ -106,16 +201,19 @@ exports.recordAttendance = async (req, res) => {
       coordinates: {
         type: 'Point',
         coordinates: [longitude, latitude],
-      }
+      },
     });
 
-    res.status(200).json({ message: 'Attendance recorded successfully', location });
+    res.status(200).json({
+      message: 'Attendance recorded successfully',
+      location,
+      distance: `${distance.toFixed(2)} meters`,
+    });
   } catch (err) {
     console.error('Attendance error:', err.message);
     res.status(500).json({ message: 'Server error' });
   }
 };
-
 
 
 exports.getAttendanceHistory = async (req, res) => {

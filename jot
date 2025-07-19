@@ -13,7 +13,8 @@ Password : uZALT9D9dtjgJS0F
 
 mongodb+srv://vanlane784:uZALT9D9dtjgJS0F@clusterjade.elw2edm.mongodb.net/?retryWrites=true&w=majority&appName=ClusterJade
 
-
-
 MONGO_URI=mongodb+srv://vanlane784:LfnM34QwuQU66Y2K@projectdrive.rsajs.mongodb.net/?retryWrites=true&w=majority&appName=projectDrive
 MONGO_URI=mongodb+srv://vanlane784:uZALT9D9dtjgJS0F@clusterjade.elw2edm.mongodb.net/?retryWrites=true&w=majority&appName=
+
+Frontend URL;
+https://project-jade-sand.vercel.app/
