@@ -182,7 +182,10 @@ const Home = () => {
       </section>
 
       {/* How It Works */}
-      <section className="bg-white py-16">
+      <section
+        className="py-16"
+        style={{ backgroundColor: "rgb(255 255 255 / 79%)" }}
+      >
         <div className="container mx-auto px-6">
           <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
