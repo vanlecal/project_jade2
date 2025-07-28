@@ -73,84 +73,24 @@ exports.getlecturerProfile = async (req, res) => {
 };
 
 
-// exports.generateQrSession = async (req, res) => {
-//   try {
-//     const { title, program } = req.body;
-//     if (!title || !program)
-//       return res.status(400).json({ message: 'QR session title and program are required' });
-
-//     let session = await Session.findOne({ title, lecturer: req.userId, program });
-
-//     if (!session) {
-//       session = await Session.create({
-//         title,
-//         lecturer: req.userId,
-//         program,
-//       });
-//     }
-
-//     const code = uuidv4();
-//     const expiresAt = new Date(Date.now() + 3 * 60 * 1000); // 3 minutes from now
-
-//     const qrSession = await QrSession.create({
-//       code,
-//       session: session._id,
-//       expiresAt,
-//     });
-
-//     // 👉 Emit an alert to the specific class/program
-//     const io = req.app.get('io');
-//     io.to(program).emit('attendance_opened', {
-//       message: `Attendance session "${title}" is now open for program ${program}`,
-//       code,
-//       expiresAt,
-//       program,
-//     });
-
-//     res.status(201).json({ code, expiresAt, title, program, sessionId: session._id });
-//   } catch (error) {
-//     console.error('QR generation error:', error.message);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// };
-
-//UPDATE StrictGPS
 exports.generateQrSession = async (req, res) => {
   try {
-    const { title, program, lat, lon } = req.body;
-
-    if (!title || !program) {
-      return res.status(400).json({
-        message: 'QR session title and program are required',
-      });
-    }
+    const { title, program } = req.body;
+    if (!title || !program)
+      return res.status(400).json({ message: 'QR session title and program are required' });
 
     let session = await Session.findOne({ title, lecturer: req.userId, program });
 
-    // If session doesn't exist, create it and store location
     if (!session) {
       session = await Session.create({
         title,
         lecturer: req.userId,
         program,
-        location: {
-          lat,
-          lon,
-        },
       });
     }
 
-    // Optional: Update location every time QR is generated
-    // Uncomment this if you want to refresh the location
-    /*
-    if (lat && lon) {
-      session.location = { lat, lon };
-      await session.save();
-    }
-    */
-
     const code = uuidv4();
-    const expiresAt = new Date(Date.now() + 3 * 60 * 1000); // 3 mins
+    const expiresAt = new Date(Date.now() + 3 * 60 * 1000); // 3 minutes from now
 
     const qrSession = await QrSession.create({
       code,
@@ -158,6 +98,7 @@ exports.generateQrSession = async (req, res) => {
       expiresAt,
     });
 
+    // 👉 Emit an alert to the specific class/program
     const io = req.app.get('io');
     io.to(program).emit('attendance_opened', {
       message: `Attendance session "${title}" is now open for program ${program}`,
@@ -166,18 +107,13 @@ exports.generateQrSession = async (req, res) => {
       program,
     });
 
-    res.status(201).json({
-      code,
-      expiresAt,
-      title,
-      program,
-      sessionId: session._id,
-    });
+    res.status(201).json({ code, expiresAt, title, program, sessionId: session._id });
   } catch (error) {
     console.error('QR generation error:', error.message);
     res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 
 exports.getLecturerSessions = async (req, res) => {

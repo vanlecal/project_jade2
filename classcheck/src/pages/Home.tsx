@@ -24,7 +24,16 @@ const Home = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50/50 to-indigo-100/50">
+    <div
+      className="min-h-screen bg-gradient-to-br from-blue-50/50 to-indigo-100/50 relative"
+      style={{
+        backgroundImage: `url('/fromJade.jpg')`,
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center center",
+        backgroundSize: "400px 400px",
+        backgroundAttachment: "fixed",
+      }}
+    >
       {/* Navigation */}
       <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
@@ -33,7 +42,6 @@ const Home = () => {
             QR Attend
           </span>
         </div>
-        {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-4">
           <Button variant="ghost" asChild>
             <Link to="/student/login" className="!no-underline">
@@ -75,7 +83,10 @@ const Home = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-6 py-16 md:py-24 text-center">
+      <section
+        className="container mx-auto px-6 py-16 md:py-24 text-center"
+        style={{ backgroundColor: "rgb(255 255 255 / 79%)" }}
+      >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -259,7 +270,10 @@ const Home = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="container mx-auto px-6 py-16 text-center">
+      <section
+        className="container mx-auto px-6 py-16 text-center"
+        style={{ backgroundColor: "rgb(255 255 255 / 79%)" }}
+      >
         <h2 className="text-2xl md:text-3xl font-bold mb-6">
           Ready to Transform Your Attendance System?
         </h2>
