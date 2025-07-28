@@ -72,43 +72,13 @@ const getRequest = async (endpoint: string, token?: string) => {
 };
 
 
-// const generateQr = async (title: string, program: string) => {
-//   const token = localStorage.getItem('token');
-
-//   try {
-//     const res = await axios.post(
-//       `${API_URL}/lecturer/generate`,
-//       { title, program },
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       }
-//     );
-//     return res.data;
-//   } catch (error: unknown) {
-//     console.error('QR generation error:', error);
-//     if (axios.isAxiosError(error) && error.response) {
-//       throw error.response.data;
-//     } else {
-//       throw new Error('Something went wrong!');
-//     }
-//   }
-// };
-
-// UPDATE StrictGPS
-const generateQr = async (
-  title: string,
-  program: string,
-  lat?: number,
-  lon?: number
-) => {
+const generateQr = async (title: string, program: string) => {
   const token = localStorage.getItem('token');
 
   try {
     const res = await axios.post(
       `${API_URL}/lecturer/generate`,
-      { title, program, lat, lon }, // Now sending location too
+      { title, program },
       {
         headers: {
           Authorization: `Bearer ${token}`,
