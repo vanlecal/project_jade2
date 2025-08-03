@@ -32,6 +32,7 @@ const Home = () => {
         backgroundPosition: "center center",
         backgroundSize: "400px 400px",
         backgroundAttachment: "fixed",
+        minHeight: "100vh",
       }}
     >
       {/* Navigation */}
