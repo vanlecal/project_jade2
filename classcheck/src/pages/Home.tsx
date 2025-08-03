@@ -85,7 +85,7 @@ const Home = () => {
       {/* Hero Section */}
       <section
         className="container mx-auto px-6 py-16 md:py-24 text-center"
-        style={{ backgroundColor: "rgb(255 255 255 / 79%)" }}
+        style={{ backgroundColor: "#fffffff2" }}
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -129,7 +129,7 @@ const Home = () => {
       <section className="container mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.2 }}>
-            <Card className="h-full">
+            <Card className="h-full" style={{ backgroundColor: "#fffffff2" }}>
               <CardHeader>
                 <div className="p-3 bg-blue-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
                   <QrCode className="w-6 h-6 text-blue-600" />
@@ -146,7 +146,7 @@ const Home = () => {
           </motion.div>
 
           <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.2 }}>
-            <Card className="h-full">
+            <Card className="h-full" style={{ backgroundColor: "#fffffff2" }}>
               <CardHeader>
                 <div className="p-3 bg-indigo-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
                   <Scan className="w-6 h-6 text-indigo-600" />
@@ -163,7 +163,7 @@ const Home = () => {
           </motion.div>
 
           <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.2 }}>
-            <Card className="h-full">
+            <Card className="h-full" style={{ backgroundColor: "#fffffff2" }}>
               <CardHeader>
                 <div className="p-3 bg-purple-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
                   <School className="w-6 h-6 text-purple-600" />
@@ -182,10 +182,7 @@ const Home = () => {
       </section>
 
       {/* How It Works */}
-      <section
-        className="py-16"
-        style={{ backgroundColor: "rgb(255 255 255 / 79%)" }}
-      >
+      <section className="py-16" style={{ backgroundColor: "#fffffff2" }}>
         <div className="container mx-auto px-6">
           <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -236,7 +233,11 @@ const Home = () => {
 
       {/* Security Features */}
       <section className="container mx-auto px-6 py-16">
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 md:p-12 text-white">
+        {/* <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 md:p-12 text-white"> */}
+        <div
+          className="rounded-2xl p-8 md:p-12 text-white"
+          style={{ backgroundColor: "oklch(0.51 0.26 276.97 / 0.89)" }}
+        >
           <h2 className="text-2xl md:text-3xl font-bold mb-6">
             Secure Attendance Tracking
           </h2>
@@ -275,7 +276,7 @@ const Home = () => {
       {/* Call to Action */}
       <section
         className="container mx-auto px-6 py-16 text-center"
-        style={{ backgroundColor: "rgb(255 255 255 / 79%)" }}
+        style={{ backgroundColor: "#fffffff2" }}
       >
         <h2 className="text-2xl md:text-3xl font-bold mb-6">
           Ready to Transform Your Attendance System?

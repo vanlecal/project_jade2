@@ -47,8 +47,17 @@ const LecturerRegister = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-      <Card className="w-full max-w-md">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-2 relative">
+      <img
+        src="/fromJade.jpg"
+        alt="Background"
+        className="fixed inset-0 w-full h-full object-contain opacity-30 z-0"
+      />
+      <div className="fixed inset-0 bg-black/10 z-0"></div>
+      <Card
+        className="w-full max-w-md relative z-10 "
+        style={{ background: "#ffffffa6" }}
+      >
         <CardHeader className="bg-indigo-600 text-white">
           <CardTitle className="text-center text-2xl font-bold">
             Lecturer Registration

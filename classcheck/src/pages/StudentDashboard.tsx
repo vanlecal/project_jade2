@@ -6,7 +6,7 @@ import SessionStatusList from "@/components/student/SessionStatusList";
 import LoadingScreen from "../components/public/LoadingScreen";
 import socket from "../utils/socket";
 
-import { QrCode, LogOut, HelpCircle } from "lucide-react";
+import { QrCode, LogOut, HelpCircle, X, Phone, Mail } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -15,6 +15,7 @@ const StudentDashboard = () => {
   const [studentindex, setStudentindex] = useState("");
   const [loading, setLoading] = useState(true);
   const [showScanner, setShowScanner] = useState(false);
+  const [showHelpPopup, setShowHelpPopup] = useState(false);
   const navigate = useNavigate();
 
   // Logout function
@@ -101,7 +102,7 @@ const StudentDashboard = () => {
           <CardContent className="flex flex-col items-center justify-center py-10">
             {!showScanner && (
               <div>
-                <div className="ml-12">
+                <div className="ml-6">
                   <Button
                     onClick={() => setShowScanner(true)}
                     size="lg"
@@ -143,7 +144,7 @@ const StudentDashboard = () => {
           </Button>
           <Button
             variant="outline"
-            // onClick={handleHelp}
+            onClick={() => setShowHelpPopup(true)}
             className="flex items-center gap-2"
           >
             <HelpCircle className="h-4 w-4" />
@@ -151,6 +152,51 @@ const StudentDashboard = () => {
           </Button>
         </div>
       </div>
+
+      {/* Help Popup */}
+      {showHelpPopup && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-4 shadow-xl">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">Help & Support</h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowHelpPopup(false)}
+                className="h-8 w-8 p-0"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <Phone className="h-5 w-5 text-blue-600" />
+                <div>
+                  <p className="text-sm font-medium">Phone</p>
+                  <p className="text-sm text-gray-600">050-991-1195</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <Mail className="h-5 w-5 text-blue-600" />
+                <div>
+                  <p className="text-sm font-medium">Email</p>
+                  <p className="text-sm text-gray-600">
+                    enyanjustine146@gmail.com
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="mt-6">
+              <Button
+                onClick={() => setShowHelpPopup(false)}
+                className="w-full"
+              >
+                Close
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

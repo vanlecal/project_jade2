@@ -58,8 +58,17 @@ const StudentRegister = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-lg rounded-2xl overflow-hidden">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-2 relative">
+      <img
+        src="/fromJade.jpg"
+        alt="Background"
+        className="fixed inset-0 w-full h-full object-contain opacity-30 z-0"
+      />
+      <div className="fixed inset-0 bg-black/10 z-0"></div>
+      <Card
+        className="w-full max-w-md shadow-lg rounded-2xl overflow-hidden relative z-10 bg-white/95"
+        style={{ background: "rgb(255 255 255 / 83%)" }}
+      >
         <CardHeader className="bg-indigo-600 text-white">
           <CardTitle className="text-2xl font-bold">
             Student Registration

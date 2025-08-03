@@ -36,8 +36,17 @@ const LecturerLogin = () => {
     }
   };
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md shadow-md rounded-lg border">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative">
+      <img
+        src="/fromJade.jpg"
+        alt="Background"
+        className="fixed inset-0 w-full h-full object-contain opacity-30 z-0"
+      />
+      <div className="fixed inset-0 bg-black/10 z-0"></div>
+      <Card
+        className="w-full max-w-md shadow-lg rounded-lg border relative z-10 bg-white/95"
+        style={{ background: "#ffffffa6" }}
+      >
         <CardHeader className="text-center bg-indigo-600 text-white">
           <CardTitle className="text-2xl font-bold">Lecturer Login</CardTitle>
         </CardHeader>
