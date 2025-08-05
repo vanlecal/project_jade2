@@ -37,6 +37,24 @@ const StudentRegister = () => {
       return;
     }
 
+    if (password.length < 6 || password.length > 20) {
+      setError("Password must be between 6 and 20 characters!");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (phone.length != 10) {
+      setError("Phone number must be 10 digits long!");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (sex === "" || program === "") {
+      setError("Please select fill fields!");
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       const response = await postRequest("student/register", {
         name,

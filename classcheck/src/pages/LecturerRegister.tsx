@@ -18,6 +18,7 @@ const LecturerRegister = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [sex, setSex] = useState("");
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
@@ -27,6 +28,30 @@ const LecturerRegister = () => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match!");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (password.length < 6 || password.length > 20) {
+      setError("Password must be between 6 and 20 characters!");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (phone.length != 10) {
+      setError("Phone number must be 10 digits long!");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (sex === "") {
+      setError("Please select a gender!");
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       const response = await postRequest("lecturer/register", {
@@ -128,6 +153,18 @@ const LecturerRegister = () => {
                 placeholder="Create a password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm your password"
                 required
               />
             </div>
