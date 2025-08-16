@@ -5,7 +5,12 @@ ClassCheck is a web application that helps track and manage class attendance eff
 ## 🔗 Live Preview
 
 You can view the live version of the project here:  
+V1
 [QR Attend](https://project-jade-sand.vercel.app/)
+
+V2
+
+[QR Attend](https://project-jade2.vercel.app/)
 
 ---
 
