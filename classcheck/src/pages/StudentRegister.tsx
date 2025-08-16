@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { postRequest } from "../utils/api";
 import { Button } from "@/components/ui/button";
@@ -70,7 +71,10 @@ const StudentRegister = () => {
         password,
       });
       localStorage.setItem("token", response.token);
-      navigate("/student/scan");
+      toast.success("Registration successful! Redirecting...");
+      setTimeout(() => {
+        navigate("/student/scan");
+      }, 1200);
     } catch (err) {
       console.error("Registration error:", err);
       setError("Registration failed, please try again!");

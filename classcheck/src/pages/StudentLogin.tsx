@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { postRequest } from "../utils/api";
 import { Input } from "@/components/ui/input";
@@ -24,7 +25,10 @@ const StudentLogin = () => {
     try {
       const response = await postRequest("student/login", { email, password });
       localStorage.setItem("token", response.token);
-      navigate("/student/scan");
+      toast.success("Login successful! Redirecting...");
+      setTimeout(() => {
+        navigate("/student/scan");
+      }, 1200);
     } catch (err: Error | unknown) {
       console.error("Login error:", err);
       if (err instanceof Error) {
