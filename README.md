@@ -1,27 +1,39 @@
+
 # ClassCheck
 
-ClassCheck is a web application that helps track and manage class attendance efficiently.
-
-## 🔗 Live Preview
-
-You can view the live version of the project here:  
-V1
-[QR Attend](https://project-jade-sand.vercel.app/)
-
-V2
-
-[QR Attend](https://project-jade2.vercel.app/)
+ClassCheck is a modern web application designed to efficiently track and manage class attendance for educational institutions. It provides real-time updates, secure authentication, and a user-friendly interface for both students and lecturers.
 
 ---
 
-## Features
+## 🚀 Live Demo
+
+**V1:** [QR Attend (V1)](https://project-jade-sand.vercel.app/)
+
+**V2:** [QR Attend (V2)](https://project-jade2.vercel.app/)
+
+---
+
+## ✨ Features
 
 - Student attendance tracking
 - Real-time attendance updates
 - User-friendly interface
 - Secure authentication system
+- Lecturer and student portals
+- QR code-based check-in
 
-## Installation
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** Vite, React.js, TypeScript, Tailwind CSS, ShadCN
+- **Backend:** Node.js, Express, Socket.io
+- **Database:** MongoDB
+- **External APIs:** openCage, zxing
+
+---
+
+## 📦 Installation
 
 ### Frontend Setup
 
@@ -39,29 +51,29 @@ npm install
 nodemon server.js
 ```
 
-## Tech Stack
+---
 
-- Frontend: Vite + React.js + Typescript + Tailwind CSS + ShadCN
--
-- Backend: Node.js, Express, socket.io, OpenCage
-- Database: MongoDB
+## ⚡ Getting Started
 
-## Getting Started
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/markdrahg/project_jade.git
+   ```
+2. **Set up the frontend and backend** following the installation steps above.
+3. **Configure your environment variables** as needed for database and API access.
+4. **Start using ClassCheck!**
 
-1. Clone the repository
-2. Set up the frontend and backend following the installation steps above
-3. Configure your environment variables
-4. Start using ClassCheck!
+---
 
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a new branch
 3. Make your changes
 4. Submit a pull request
 
-## License
+---
 
-This project is licensed under the MIT License.Backend
-cd backend
-nodemon server.js
+## 📄 License
+
+This project is licensed under the MIT License.
