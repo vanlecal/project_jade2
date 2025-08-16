@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Eye, EyeOff } from "lucide-react";
 
 const LecturerRegister = () => {
   const [name, setName] = useState("");
@@ -22,8 +23,11 @@ const LecturerRegister = () => {
   const [sex, setSex] = useState("");
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +45,7 @@ const LecturerRegister = () => {
       return;
     }
 
-    if (phone.length != 10) {
+    if (phone.length !== 10) {
       setError("Phone number must be 10 digits long!");
       setIsSubmitting(false);
       return;
@@ -78,9 +82,9 @@ const LecturerRegister = () => {
         alt="Background"
         className="fixed inset-0 w-full h-full object-contain opacity-30 z-0"
       />
-      <div className="fixed inset-0 bg-black/10 z-0"></div>
+      <div className="fixed inset-0 bg-black/10 z-0" />
       <Card
-        className="w-full max-w-md relative z-10 "
+        className="w-full max-w-md relative z-10"
         style={{ background: "#ffffffa6" }}
       >
         <CardHeader className="bg-indigo-600 text-white">
@@ -145,28 +149,48 @@ const LecturerRegister = () => {
               </Select>
             </div>
 
-            <div className="space-y-2">
+            {/* Password */}
+            <div className="space-y-2 relative">
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Create a password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                className="pr-10"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-3 top-[38px] text-gray-500 hover:text-gray-700"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
 
-            <div className="space-y-2">
+            {/* Confirm Password */}
+            <div className="space-y-2 relative">
               <Label htmlFor="confirmPassword">Confirm Password</Label>
               <Input
                 id="confirmPassword"
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirm your password"
                 required
+                className="pr-10"
               />
+              <button
+                type="button"
+                onClick={() =>
+                  setShowConfirmPassword((prev) => !prev)
+                }
+                className="absolute right-3 top-[38px] text-gray-500 hover:text-gray-700"
+              >
+                {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
 
             <Button

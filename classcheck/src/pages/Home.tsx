@@ -140,7 +140,7 @@ const Home = () => {
               <CardContent>
                 <CardDescription>
                   Lecturers generate unique QR codes that automatically refresh
-                  every 5 minutes for enhanced security.
+                  every 3 minutes for enhanced security.
                 </CardDescription>
               </CardContent>
             </Card>
@@ -248,7 +248,7 @@ const Home = () => {
               <div>
                 <h3 className="font-semibold mb-1">Time-Limited Codes</h3>
                 <p className="text-blue-100 text-sm">
-                  QR codes refresh every 5 minutes to prevent misuse
+                  QR codes refresh every 3 minutes to prevent misuse
                 </p>
               </div>
             </div>
