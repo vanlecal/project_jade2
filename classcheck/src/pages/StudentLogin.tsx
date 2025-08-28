@@ -13,7 +13,7 @@ const StudentLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // 👈 New state for toggle
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
 

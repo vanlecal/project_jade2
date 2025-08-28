@@ -22,7 +22,19 @@ exports.registerUser = async (req, res) => {
       if (existingUser) {
         return res.status(409).json({ message: 'Email already exists' });
       }
-  
+
+      // Check if index number already exists
+      const existingIndex = await User.findOne({ index });
+      if (existingIndex) {
+        return res.status(409).json({ message: 'Index number already exists...' });
+      }
+
+      // Check if phone number already exists
+      const existingPhone = await User.findOne({ phone });
+      if (existingPhone) {
+        return res.status(409).json({ message: 'Phone number already exists' });
+      }
+
       const hashedPassword = await bcrypt.hash(password, 10);
   
       const user = new User({ name, index, phone, email, sex, program, password: hashedPassword, role: 'student' });
@@ -47,7 +59,7 @@ exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: 'Invalid credentials' });
+    if (!user) return res.status(400).json({ message: 'User not found' });
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });

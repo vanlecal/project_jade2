@@ -18,12 +18,13 @@ const postRequest = async (endpoint: string, data: object) => {
     const response = await axios.post(`${API_URL}/${endpoint}`, data);
     return response.data;
   } catch (error: unknown) {
-    console.error('API Error:', error);
+    console.error("API Error:", error);
 
     if (axios.isAxiosError(error) && error.response) {
-      throw error.response.data;
+      const msg = error.response.data?.message || "Request failed";
+      throw new Error(msg);
     } else {
-      throw new Error('Something went wrong!');
+      throw new Error("Something went wrong!");
     }
   }
 };

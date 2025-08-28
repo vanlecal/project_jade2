@@ -71,9 +71,9 @@ const LecturerRegister = () => {
       setTimeout(() => {
         navigate("/lecturer/dashboard");
       }, 1200);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Registration error:", err);
-      setError("Registration failed, please try again!");
+      setError(err.message || "Registration failed, please try again!");
     } finally {
       setIsSubmitting(false);
     }
