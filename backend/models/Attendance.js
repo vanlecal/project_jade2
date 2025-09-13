@@ -18,6 +18,9 @@ const attendanceSchema = new mongoose.Schema({
   location: {
     type: String,
   },
+  ip: {
+    type: String,
+  },
   coordinates: {
     type: {
       type: String,

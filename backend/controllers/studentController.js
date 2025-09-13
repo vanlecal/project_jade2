@@ -92,10 +92,14 @@ exports.recordAttendance = async (req, res) => {
     const { code, latitude, longitude } = req.body;
     const studentId = req.userId;
 
+    // Get Student IP
+    const ip = req.headers["x-forwarded-for"]?.split(",")[0] || req.socket.remoteAddress;
+
     console.log('Received code:', code);
     console.log('Received studentId:', studentId);
     console.log('Received latitude:', latitude);
     console.log('Received longitude:', longitude);
+    console.log('Received IP:', ip)
 
     const qrSession = await QrSession.findOne({ code }).populate('session');
     if (!qrSession) return res.status(404).json({ message: 'Invalid QR code' });
@@ -115,6 +119,7 @@ exports.recordAttendance = async (req, res) => {
       session: sessionId,
       scannedAt: new Date(),
       location,
+      ip,
       coordinates: {
         type: 'Point',
         coordinates: [longitude, latitude],

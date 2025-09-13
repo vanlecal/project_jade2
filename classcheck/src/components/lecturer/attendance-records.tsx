@@ -25,6 +25,7 @@ interface AttendanceRecord {
   student: Student;
   location: string;
   scannedAt: string;
+  ip: string;
 }
 
 export function AttendanceRecords() {
@@ -135,6 +136,8 @@ export function AttendanceRecords() {
                             <th className="py-2 pr-4">Index Number</th>
                             <th className="py-2 pr-4">GPS Location</th>
                             <th className="py-2">Time</th>
+                            <th className="py-2">Device IP</th>
+                            
                           </tr>
                         </thead>
                         <tbody>
@@ -147,12 +150,13 @@ export function AttendanceRecords() {
                                 {record.student.index}
                               </td>
                               <td className="py-2 pr-4">{record.location}</td>
-                              <td className="py-2">
+                              <td className="py-2 pr-4">
                                 {new Date(record.scannedAt).toLocaleTimeString(
                                   [],
                                   { hour: "2-digit", minute: "2-digit" }
                                 )}
                               </td>
+                              <td className="py-2 pr-4">{record.ip}</td>
                             </tr>
                           ))}
                         </tbody>

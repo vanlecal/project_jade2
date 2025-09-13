@@ -21,6 +21,7 @@ app.set('io', io);
 connectDB();
 app.use(cors());
 app.use(express.json());
+app.set("trust proxy", true);
 
 app.use('/api/student', require('./routes/studentRoutes'));
 app.use('/api/lecturer', require('./routes/lecturerRoutes'));
