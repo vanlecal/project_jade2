@@ -89,6 +89,7 @@ export function RecentAttendanceSessions() {
         };
         scannedAt: string;
         location: string;
+        ip: string;
       }
 
       const attendanceRecords = data.map((record: AttendanceRecord) => ({
@@ -100,6 +101,7 @@ export function RecentAttendanceSessions() {
         Program: record.student.program,
         ScannedAt: new Date(record.scannedAt).toLocaleString(),
         Location: record.location,
+        IP: record.ip,
       }));
 
       const csv = Papa.unparse(attendanceRecords);
